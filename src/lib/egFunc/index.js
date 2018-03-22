@@ -4,9 +4,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends2 = require('babel-runtime/helpers/extends');
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _typeof2 = require('babel-runtime/helpers/typeof');
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // 所有方法名必须唯一
 
@@ -270,7 +276,7 @@ var time = {
     var currentDate = new Date();
     var time = 0;
     var day = new Date();
-    if ((typeof n === 'undefined' ? 'undefined' : _typeof(n)) === 'object') {
+    if ((typeof n === 'undefined' ? 'undefined' : (0, _typeof3.default)(n)) === 'object') {
       day = n;
     } else {
       time = currentDate.getTime() + 24 * 60 * 60 * 1000 * n;
@@ -293,7 +299,7 @@ var time = {
     var currentDate = new Date();
     var time = 0;
     var day = new Date();
-    if ((typeof n === 'undefined' ? 'undefined' : _typeof(n)) === 'object') {
+    if ((typeof n === 'undefined' ? 'undefined' : (0, _typeof3.default)(n)) === 'object') {
       day = n;
     } else {
       time = currentDate.getTime() + n;
@@ -340,4 +346,4 @@ var getLocation = {
   }
 };
 
-exports.default = _extends({}, dealCookie, debounce, fullScreen, picture, dealClass, time, getLocation);
+exports.default = (0, _extends3.default)({}, dealCookie, debounce, fullScreen, picture, dealClass, time, getLocation);

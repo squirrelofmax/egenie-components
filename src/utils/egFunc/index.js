@@ -1,7 +1,36 @@
 // 所有方法名必须唯一
 
+const dealClass = {
+  // DOM 元素对类名操作
+
+  // elements: 例： document.getElementById('test')
+  // cName: 类名
+  hasClass: (elements, cName) => {
+    console.log(elements)
+    if (elements == undefined) {
+      return false
+    } else {
+      return !!elements.className.match(new RegExp('(\\s|^)' + cName + '(\\s|$)'))
+    }
+  },
+  addClass: (elements, cName) => {
+    if (!dealClass.hasClass(elements, cName)) {
+      elements.className += ' ' + cName
+    };
+  },
+  removeClass: (elements, cName) => {
+    if (dealClass.hasClass(elements, cName)) {
+      elements.className = elements.className.replace(new RegExp('(\\s|^)' + cName + '(\\s|$)'), ' ')
+    };
+  }
+}
+
 const dealCookie = {
   // 设置cookie
+
+  // cname :  cookie name
+  // cvalue : cookie value
+  // exdays: expire time
   setCookie: function (cname, cvalue, exdays) {
     var d = new Date()
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000))
@@ -83,6 +112,10 @@ const debounce = {
 
 const fullScreen = {
   // echarts图表全屏实现
+
+  // id: id
+  // myChart:  EChart 图表实例
+  // backgroundColor:  全屏背景色
   fullScreenForChart: function (id, myChart, backgroundColor) {
     let chartHeight = document.getElementById(id).offsetHeight
     console.log(chartHeight)
@@ -179,8 +212,38 @@ const fullScreen = {
   }
 }
 
+const getLocation = {
+  // 页面获取坐标信息
+
+  // ele : document.getElementById('test')
+
+  // 获取元素绝对位置横坐标
+  getElementLeft: function (ele) {
+    let actualLeft = ele.offsetLeft
+    let current = ele.offsetParent
+    while (current !== null) {
+      actualLeft += current.offsetLeft
+      current = current.offsetParent
+    }
+    return actualLeft
+  },
+  // 获取元素绝对位置纵坐标
+  getElementTop: function (ele) {
+    let actualTop = ele.offsetTop
+    let current = ele.offsetParent
+    while (current !== null) {
+      actualTop += current.offsetTop
+      current = current.offsetParent
+    }
+    return actualTop
+  }
+}
+
 const picture = {
-  // 图片放大展示
+  // 图片放大展示（常用于表格中）
+
+  // event: event || e
+  // pic: 图片地址
   showPic: function (event, pic) {
         // console.log(event)
     console.log(pic)
@@ -235,29 +298,9 @@ const picture = {
   }
 }
 
-const dealClass = {
-  // DOM 元素对类名操作
-  hasClass: (elements, cName) => {
-    console.log(elements)
-    if (elements == undefined) {
-      return false
-    } else {
-      return !!elements.className.match(new RegExp('(\\s|^)' + cName + '(\\s|$)'))
-    }
-  },
-  addClass: (elements, cName) => {
-    if (!dealClass.hasClass(elements, cName)) {
-      elements.className += ' ' + cName
-    };
-  },
-  removeClass: (elements, cName) => {
-    if (dealClass.hasClass(elements, cName)) {
-      elements.className = elements.className.replace(new RegExp('(\\s|^)' + cName + '(\\s|$)'), ' ')
-    };
-  }
-}
-
 const time = {
+  // 时间日期处理
+
   // 获取距现在天数为n(整数，负或正分别代表前或后)的年月日 或传日期对象
   getDay: function (n) {
     var currentDate = new Date()
@@ -281,7 +324,7 @@ const time = {
 
     return [day.getFullYear(), m, _d]
   },
-  // 获取距现在毫秒数为n(整数，负或正分别代表前或后)的年月日或传 日期对象
+  // 获取距现在毫秒数为n(整数，负或正分别代表前或后)的时分秒或传 日期对象
   getTime: function (n) {
     let currentDate = new Date()
     var time = 0
@@ -310,35 +353,12 @@ const time = {
   }
 }
 
-const getLocation = {
-  // 获取元素绝对位置横坐标
-  getElementLeft: function (ele) {
-    let actualLeft = ele.offsetLeft
-    let current = ele.offsetParent
-    while (current !== null) {
-      actualLeft += current.offsetLeft
-      current = current.offsetParent
-    }
-    return actualLeft
-  },
-  // 获取元素绝对位置纵坐标
-  getElementTop: function (ele) {
-    let actualTop = ele.offsetTop
-    let current = ele.offsetParent
-    while (current !== null) {
-      actualTop += current.offsetTop
-      current = current.offsetParent
-    }
-    return actualTop
-  }
-}
-
 export default {
   ...dealCookie,
+  ...dealClass,
   ...debounce,
   ...fullScreen,
+  ...getLocation,
   ...picture,
-  ...dealClass,
-  ...time,
-  ...getLocation
+  ...time
 }

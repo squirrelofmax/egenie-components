@@ -4,15 +4,24 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _regenerator = require('babel-runtime/regenerator');
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+var _regenerator2 = _interopRequireDefault(_regenerator);
 
-// Created by Max on 17/06/17
-// import React from 'react'
-// import { Message } from 'element-react'
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
+var _elementReact = require('element-react');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 exports.default = function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+  var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
     var _console;
 
     for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
@@ -20,52 +29,54 @@ exports.default = function () {
     }
 
     var response, result;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+    return _regenerator2.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            (_console = console).log.apply(_console, _toConsumableArray(args).concat(['进入egFetch']));
+            (_console = console).log.apply(_console, (0, _toConsumableArray3.default)(args).concat(['进入egFetch']));
             _context.next = 3;
-            return fetch.apply(undefined, _toConsumableArray(args));
+            return fetch.apply(undefined, (0, _toConsumableArray3.default)(args));
 
           case 3:
             response = _context.sent;
 
             if (response.ok) {
-              _context.next = 6;
+              _context.next = 7;
               break;
             }
 
+            _elementReact.Message.error({ message: '网络错误，请检查！', showClose: true });
             return _context.abrupt('return');
 
-          case 6:
-            _context.prev = 6;
-            _context.next = 9;
+          case 7:
+            _context.prev = 7;
+            _context.next = 10;
             return response.json();
 
-          case 9:
+          case 10:
             result = _context.sent;
 
             if (!(result.status === 'Unauthenticated')) {
-              _context.next = 12;
+              _context.next = 14;
               break;
             }
 
+            _elementReact.Message.error(result.data);
             return _context.abrupt('return', result);
 
-          case 12:
+          case 14:
             return _context.abrupt('return', result);
-
-          case 15:
-            _context.prev = 15;
-            _context.t0 = _context['catch'](6);
 
           case 17:
+            _context.prev = 17;
+            _context.t0 = _context['catch'](7);
+
+          case 19:
           case 'end':
             return _context.stop();
         }
       }
-    }, _callee, this, [[6, 15]]);
+    }, _callee, this, [[7, 17]]);
   }));
 
   function egFetch() {
@@ -73,4 +84,4 @@ exports.default = function () {
   }
 
   return egFetch;
-}();
+}(); // Created by Max on 17/06/17

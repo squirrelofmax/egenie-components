@@ -15,5 +15,8 @@ var _egFunc2 = _interopRequireDefault(_egFunc);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+require('babel-core/register');
+require('babel-polyfill');
+
 exports.egFetch = _egFetch2.default;
 exports.egFunc = _egFunc2.default;
