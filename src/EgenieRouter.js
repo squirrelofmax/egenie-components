@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import EgFetchAPI from './components/EgFetchAPI'
 import EgFuncAPI from './components/EgFuncAPI'
+import Document from './components/index.js'
 
 const EgenieRouter = () => {
   return (
@@ -10,6 +11,7 @@ const EgenieRouter = () => {
       <div>
         <Route path='/egFetch' component={EgFetchAPI} />
         <Route path='/egFunc' component={EgFuncAPI} />
+        <Route path='/document' component={Document} />
       </div>
     </Router>
   )

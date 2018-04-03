@@ -1,28 +1,89 @@
 // 所有方法名必须唯一
+// 函数以小驼峰方式命名，但辅助函数加上'help_'前缀以提醒此函数不建议使用
+// 当有复数时直接末尾加s，如本身末尾为s则加es；将来时末尾加ll，过去式末尾加ed，进行时末尾加ing。无视本身英文规则
+// 函数总是有返回值，如果无合适返回值，则返回true
 
 const dealClass = {
   // DOM 元素对类名操作
 
-  // elements: 例： document.getElementById('test')
+  // element: 例： document.getElementById('test')
   // cName: 类名
-  hasClass: (elements, cName) => {
-    console.log(elements)
-    if (elements == undefined) {
-      return false
-    } else {
-      return !!elements.className.match(new RegExp('(\\s|^)' + cName + '(\\s|$)'))
-    }
+  checkElement: (element, cName) => {
+    // 检查节点
+    let c0 = element.innerHTML !== undefined,
+      c1 = typeof(element.nodeName) === 'string',
+      c2 = typeof(cName) === 'string' 
+      console.log(c0, c1, c2);
+    return c0 && c1 && c2
   },
-  addClass: (elements, cName) => {
-    if (!dealClass.hasClass(elements, cName)) {
-      elements.className += ' ' + cName
-    };
+  hasClass: (element, cName) => {
+    // 节点是否拥有组名
+    if (!dealClass.checkElement(element, cName)) {return false}
+    return element.classList.contains(cName)
   },
-  removeClass: (elements, cName) => {
-    if (dealClass.hasClass(elements, cName)) {
-      elements.className = elements.className.replace(new RegExp('(\\s|^)' + cName + '(\\s|$)'), ' ')
-    };
-  }
+  addClass: (element, cName) => {
+    // 节点添加组名
+    if (!dealClass.checkElement(element, cName)) {return}
+    element.classList.add(cName)
+    return element
+  },
+  addClasses: (element, ...cNames) => {
+    // 节点增加多个类名
+    cNames.forEach(v => {
+      dealClass.addClass(element, v)
+    })
+    return element
+  },
+  addsClass: (...elements) => {
+    // 多个节点增加一个类名
+    let cName = elements.pop()
+    elements.forEach(v => {
+      dealClass.addClass(v, cName)
+    })
+    return elements
+  },
+  removeClass: (element, cName) => {
+    // 节点删除组名
+    if (!dealClass.checkElement(element, cName)) {return}
+    element.classList.remove(cName)
+    return element
+  },
+  removeClasses: (element, ...cNames) => {
+    // 节点删除多个类名
+    cNames.forEach(v => {
+      dealClass.removeClass(element, v)
+    })
+    return element
+  },
+  removesClass: (...elements) => {
+    // 多个节点删除一个类名
+    let cName = elements.pop()
+    elements.forEach(v => {
+      dealClass.removeClass(v, cName)
+    })
+    return elements
+  },
+  toggleClass: (element, cName) => {
+    // 切换组名，如果有就删掉，如果没有就添加
+    if (!dealClass.checkElement(element, cName)) {return}
+    element.classList.toggle(cName)
+    return element
+  },
+  toggleClasses: (element, ...cNames) => {
+    // 节点切换多个类名
+    cNames.forEach(v => {
+      dealClass.toggleClass(element, v)
+    })
+    return element
+  },
+  togglesClass: (...elements) => {
+    // 多个节点切换类名
+    let cName = elements.pop()
+    elements.forEach(v => {
+      dealClass.toggleClass(v, cName)
+    })
+    return elements
+  },
 }
 
 const dealCookie = {
@@ -36,21 +97,24 @@ const dealCookie = {
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000))
     var expires = 'expires=' + d.toUTCString()
     document.cookie = cname + '=' + cvalue + '; ' + expires + '; path="/"'
+    return true
   },
   // 获取cookie
   getCookie: function (cname) {
     var name = cname + '='
     var ca = document.cookie.split(';')
-    for (var i = 0; i < ca.length; i++) {
+    // for (var i = 0; i < ca.length; i++) {
+    for (var i = 0, len = ca.length; i < len; i++) {
       var c = ca[i]
-      while (c.charAt(0) == ' ') c = c.substring(1)
-      if (c.indexOf(name) != -1) return c.substring(name.length, c.length)
+      while (c.charAt(0) === ' ') c = c.substring(1)
+      if (c.indexOf(name) !== -1) return c.substring(name.length, c.length)
     }
     return ''
   },
   // 清除cookie
   clearCookie: function (name) {
     dealCookie.setCookie(name, '', -1)
+    return true
   }
 }
 
@@ -179,12 +243,12 @@ const fullScreen = {
 
           console.log(13)
           var chartStyle = document.getElementById(id).style
-          if (dealClass.hasClass(document.getElementById('hideTable'), 'hideTable')) {
+          if (document.querySelector('#hideTable') !== undefined && document.querySelector('#hideTable').classList.contains('hideTable')) {
                       // console.log(14);
             chartStyle.width = '44.5%'
           } else {
                       // console.log(15);
-            chartStyle.width = '95%'
+            chartStyle.width = '100%'
           }
           chartStyle.height = chartHeight + 'px'
           chartStyle['z-index'] = 1
@@ -215,12 +279,12 @@ const fullScreen = {
 const getLocation = {
   // 页面获取坐标信息
 
-  // ele : document.getElementById('test')
+  // element : document.getElementById('test')
 
   // 获取元素绝对位置横坐标
-  getElementLeft: function (ele) {
-    let actualLeft = ele.offsetLeft
-    let current = ele.offsetParent
+  getElementLeft: function (element) {
+    let actualLeft = element.offsetLeft
+    let current = element.offsetParent
     while (current !== null) {
       actualLeft += current.offsetLeft
       current = current.offsetParent
@@ -228,14 +292,18 @@ const getLocation = {
     return actualLeft
   },
   // 获取元素绝对位置纵坐标
-  getElementTop: function (ele) {
-    let actualTop = ele.offsetTop
-    let current = ele.offsetParent
+  getElementTop: function (element) {
+    let actualTop = element.offsetTop
+    let current = element.offsetParent
     while (current !== null) {
       actualTop += current.offsetTop
       current = current.offsetParent
     }
     return actualTop
+  },
+  toScreenTop() {
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
+    return true
   }
 }
 
@@ -244,114 +312,118 @@ const picture = {
 
   // event: event || e
   // pic: 图片地址
-  showPic: function (event, pic) {
-        // console.log(event)
-    console.log(pic)
-
-    if (!document.getElementById('picImg')) {
-      const picDiv = document.createElement('div')
-      picDiv.id = 'picUrl'
-      picDiv.style.display = 'none'
-            // <div id="picUrl" style="display: none;"></div>
-      const picImg = document.createElement('img')
-      picImg.style.width = '280px'
-      picImg.style.height = '280px'
-      picImg.id = 'picImg'
-            // <img src="" style="width: 280px;height: 280px;;" alt="" id="picImg">
-      picDiv.appendChild(picImg)
-      document.body.appendChild(picDiv)
+  // picH: 要显示大图的高度
+  showPic: function (event, pic, picH = 200) {
+    picture.hidePic()
+    if (document.getElementById('bigerBigerShowImgBox') === null) {
+      let box = document.createElement('div')
+      let img = document.createElement('img')
+      box.id = 'bigerBigerShowImgBox'
+      img.id = 'bigerBigerShowImg'
+      document.body.appendChild(box)
+      box.appendChild(img)
     }
-    console.log(13)
-    var x = event.clientX,
-      y = event.clientY,
-      lImgWidth = 280,
-      sImgWidth = 20,
-      windowHeight = window.innerHeight,
-      windowWidth = window.innerWidth
-    if (windowHeight - y < lImgWidth) {
-      y -= lImgWidth + sImgWidth
-    } else {
-      y += sImgWidth
+    let [x, y, winW, winH] = [event.clientX, event.clientY, window.innerWidth, window.innerHeight]
+    let boxDom = document.querySelector('#bigerBigerShowImgBox')
+    let imgDom = document.querySelector('#bigerBigerShowImg')
+    boxDom.style.opacity = 0
+    imgDom.style.cssText = `height: ${picH}px;`
+    imgDom.src = pic
+    imgDom.onload = () => {
+      let [imgW, imgH] = [imgDom.offsetWidth, imgDom.offsetHeight]
+      if (x + imgW > winW) {x -= imgW}
+      if (y + imgH > winH) {y -= imgH}
+      boxDom.style.cssText = `
+        position: absolute;
+        z-index: 233;
+        top: ${y}px;
+        left: ${x}px;
+        opacity: 1;
+      `
     }
-    if (windowWidth - x < lImgWidth) {
-      x -= lImgWidth + sImgWidth
-    } else {
-      x += sImgWidth
-    }
-
-    document.getElementById('picImg').src = pic
-
-    const picStyle = document.getElementById('picUrl').style
-    console.log(picStyle)
-    console.log(x)
-    console.log(y)
-    picStyle.display = 'block'
-    picStyle.border = 0
-    picStyle.position = 'absolute'
-    picStyle.left = x + 'px'
-    picStyle.top = y + 'px'
-    picStyle.zIndex = 99999
+    return boxDom
   },
-
-  hidePic: function (event, pic) {
-    document.getElementById('picUrl').style.display = 'none'
+  hidePic: function () {
+    let toRemove = document.querySelector('#bigerBigerShowImgBox')
+    if (toRemove === null) {return}
+    document.body.removeChild(toRemove)
+    return true
   }
 }
 
 const time = {
   // 时间日期处理
-
-  // 获取距现在天数为n(整数，负或正分别代表前或后)的年月日 或传日期对象
-  getDay: function (n) {
-    var currentDate = new Date()
-    var time = 0
-    var day = new Date()
-    if (typeof n === 'object') {
-      day = n
-    } else {
-      time = currentDate.getTime() + 24 * 60 * 60 * 1000 * n
-      day = new Date(time)
-    }
-
-    var m = day.getMonth() + 1
-    if (m.toString().length == 1) {
-      m = '0' + m
-    }
-    var _d = day.getDate()
-    if (_d.toString().length == 1) {
-      _d = '0' + _d
-    }
-
-    return [day.getFullYear(), m, _d]
+  help_add0: function(s) {
+    // 辅助函数，使个位数变成2位字符串
+    return ('00' + s).substr(-2)
   },
-  // 获取距现在毫秒数为n(整数，负或正分别代表前或后)的时分秒或传 日期对象
-  getTime: function (n) {
-    let currentDate = new Date()
-    var time = 0
-    var day = new Date()
-    if (typeof n === 'object') {
-      day = n
+  help_toString: (arr, brage) => {
+    let re = ''
+    switch (brage) {
+      case 'chd':
+        re = `${arr[0]}年${arr[1]}月${arr[2]}日`
+        break;
+      case 'cht':
+        re = `${arr[0]}时${arr[1]}分${arr[2]}秒`
+        break;
+      default:
+        re = arr.join(brage)
+        break;
+    }
+    return re
+  },
+  getDay: function (n, brage = 'no') {
+    // 获取距现在天数为n(整数，负或正分别代表前或后)的年月日 或传日期对象
+    let [currentDate, toTime, day] = [new Date(), 0, null]
+    switch (typeof(n)) {
+      case 'object':
+        day = n
+        break
+      case 'number':
+        n = n | 0
+        toTime = currentDate.getTime() + 24 * 60 * 60 * 1000 * n
+        day = new Date(toTime)
+        break
+      default:
+        return
+    }
+    let y = '' + day.getFullYear(),
+      m = time.help_add0(day.getMonth() + 1),
+      d = time.help_add0(day.getDate())
+    let re = [y, m, d]
+    if (brage === 'no') {
+      return re
     } else {
-      time = currentDate.getTime() + n
-      day = new Date(time)
+      return time.help_toString(re, brage)
     }
-
-    var h = day.getHours(),
-      m = day.getMinutes(),
-      s = day.getSeconds()
-    if (h.toString().length == 1) {
-      h = '0' + h
+  },
+  getTime: function (n, brage = 'no') {
+    // 获取距现在毫秒数为n(整数，负或正分别代表前或后)的时分秒或传 日期对象
+    let [currentDate, toTime, day] = [new Date(), 0, null]
+    switch (typeof(n)) {
+      case 'object':
+        day = n
+        break
+      case 'number':
+        n = n | 0
+        toTime = currentDate.getTime() + n
+        day = new Date(toTime)
+        break
+      default:
+        return
     }
-    if (m.toString().length == 1) {
-      m = '0' + m
+    let h = time.help_add0(day.getHours()),
+      m = time.help_add0(day.getMinutes()),
+      s = time.help_add0(day.getSeconds())
+    let re = [h, m, s]
+    if (brage === 'no') {
+      return re
+    } else {
+      return time.help_toString(re, brage)
     }
-    if (s.toString().length == 1) {
-      s = '0' + s
-    }
-
-    return [h, m, s]
   }
 }
+
 
 export default {
   ...dealCookie,
@@ -360,5 +432,5 @@ export default {
   ...fullScreen,
   ...getLocation,
   ...picture,
-  ...time
+  ...time,
 }

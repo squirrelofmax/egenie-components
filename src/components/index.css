@@ -1,0 +1,61 @@
+body {
+    min-height: 101vh;
+}
+.B {
+    display: flex;
+    margin: 20px auto;
+    width: 1200px;
+}
+.B>.left {
+    width: 10%;
+    user-select: none;
+}
+.B>.left>.docDefault:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.B>.left>.active {
+    text-decoration: underline;
+}
+
+.B>.right {
+    width: 80%;
+}
+.B>.right>.egDocDefault>.short {
+    margin-bottom: 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid lightgray;
+}
+.B>.right>.egDocDefault>.def {
+    border-top: 1px solid lightgray;
+}
+.B>.right>.egDocDefault>.def>.ipt::before {
+    content: "! ";
+}
+.B>.right>.egDocDefault>.def>.more {
+    color: gray;
+}
+.B>.right>.code {
+    border: 1px solid lightgray;
+    padding: 10px;
+    background-color: rgb(247, 247, 247);
+    white-space: pre-wrap;
+    font-family:  Consolas, monospace, '等线';
+}
+
+.B>.toTop0 {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    border: 1px solid gray;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+}
+.B>.toTop1 {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 10px;
+}
