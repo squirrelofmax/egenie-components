@@ -1,0 +1,17 @@
+.filtergroup-wrapper{
+  display:flex;
+  align-items:center;
+  flex-flow:row wrap;
+  min-width:740px;
+  box-sizing:border-box;
+  flex:1 1 auto;
+}
+.filtergroup-wrapper>.filteritem-wrapper>.filteritem-label{
+  margin-left:2px;
+}
+.filtergroup-wrapper>.filteritem-wrapper:nth-of-type(5n - 4 )>.filteritem-label{
+  margin-left:0;
+}
+.filtergroup-wrapper>.filteritem-wrapper:nth-of-type(n + 6){
+  margin-top:5px;
+}

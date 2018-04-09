@@ -1,0 +1,10 @@
+.oms-sale-order__container .morefilterpanel-wrapper .el-dialog__wrapper {
+    top: 103px !important;
+}
+.oms-sale-order__container .filterset-wrapper .orderpanel-wrapper .el-dialog--small {
+    top:142px;
+}
+.oms-sale-order__main-grid__select-formatter.ejl-grid-cell--disabled{
+    text-align:center !important;
+    margin-left: -8px;
+}

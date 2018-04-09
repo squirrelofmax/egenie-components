@@ -1,0 +1,89 @@
+.ejl-grid-cell--editable .el-date-editor,
+.ejl-grid-cell--editable .el-date-editor.el-input {
+    width:100%;
+}
+
+/* 数字 */
+/*数字*/
+
+.ejl-grid-cell--editable>.el-input-number {
+    height: 26px;
+    width:100%;
+}
+
+.ejl-grid-cell--editable>.el-input-number>.el-input {
+    height: 100%;
+    width: 100%;
+}
+
+.ejl-grid-cell--editable>.el-input-number>.el-input>.el-input__inner {
+    height: 100%;
+    width: 100%;
+    font-size: 11px;
+    padding-right: 17px;
+    padding-left: 0;
+}
+
+.ejl-grid-cell--editable>.el-input-number>span {
+    width: 16px;
+    height: 50%;
+    line-height: 1em;
+}
+
+.ejl-grid-cell--editable>.el-input-number>span:nth-of-type(2) {
+    right: 0;
+}
+
+.ejl-grid-cell--editable>.el-input-number>span:nth-of-type(1) {
+    top: 12px;
+    right: 0;
+    border-top: 1px solid #bfcbd9;
+}
+
+.ejl-grid-cell--editable>.el-input-number>span>i {
+    transform: scale(0.7);
+}
+
+/* 下拉 */
+.ejl-grid-cell__select .el-input__inner {
+    height: 26px;
+}
+
+.ejl-grid-cell__select .el-select-dropdown__list {
+    width: 100%;
+}
+
+.ejl-grid-cell__select .el-select-dropdown {
+    left: 0 !important;
+}
+
+.react-grid-Cell.editing .ejl-grid-cell--editable{
+    padding-top:3px !important;
+}
+
+.ejl-grid-cell__select .el-select__tags {
+    white-space: nowrap;
+    top:0;
+    transform:translateY(0);
+    overflow:auto;
+    /* height:40px;*/
+}
+.ejl-grid-cell__select .el-select .el-tag{
+    margin-top:1px;
+}
+
+.ejl-grid-cell__select .el-select{
+    position:relative;
+    width:100%;
+}
+/* .ejl-grid-cell__select .el-select::before{
+    content:'';
+    position:absolute;
+    z-index:2;
+    width:100%;
+    height:100%;
+} */
+.ejl-grid-cell--align-center-when-disabled.ejl-grid-cell--disabled{
+    text-align:center !important;
+    margin-left: -8px;
+}

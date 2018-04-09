@@ -1,0 +1,11 @@
+.select-formatter .el-input__inner{
+   height:26px;
+ }
+
+.select-formatter .el-select-dropdown__list{
+  width:100%;
+}
+
+.select-formatter .el-select-dropdown{
+  left:0 !important;
+}

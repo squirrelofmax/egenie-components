@@ -1,5 +1,159 @@
-body {
-  margin: 0;
+* {
   padding: 0;
-  font-family: sans-serif;
+  margin: 0;
+}
+
+body {
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+}
+
+html,
+body,
+#root,
+#root>div {
+  height: 100%
+}
+
+html {
+  font-size: 62.5%;
+}
+
+.el-message-box {
+  border: 2px solid #eee;
+}
+
+#root .el-input-number__decrease,
+#root .el-input-number__increase {
+  color: #000;
+}
+
+#root .el-input-number__decrease.is-disabled,
+#root .el-input-number__increase.is-disabled {
+  color: #d1dbe5;
+}
+
+.el-message {
+  z-index: 999999999 !important;
+}
+
+.el-input-number>.el-input>.el-input__inner {
+  text-align: right;
+}
+
+.el-select-dropdown {
+  z-index: 999999999 !important;
+}
+
+.el-input__inner {
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+
+.el-button {
+  border-radius: 0 !important;
+}
+
+.el-button--small {
+  border: 1px solid #bfcbd9;
+}
+
+.el-input__inner.has-value {
+  background-color: rgb(250, 230, 205);
+  background-clip: border-box;
+}
+
+ul {
+  list-style: none;
+}
+
+.el-input__icon {
+  color: #888 !important;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+}
+
+.el-input__inner::placeholder {
+  color: grey;
+}
+
+.el-input__icon+.el-input__inner {
+  padding-right: 20px;
+}
+
+.el-button--small {
+  height: 26px;
+}
+
+.el-button [class*=" el-icon-"],
+.el-button [class^=el-icon-] {
+  color: #20A0FF;
+}
+
+.el-button--primary [class*=" el-icon-"],
+.el-button--primary [class^=el-icon-] {
+  color: #fff;
+}
+
+.el-input__inner {
+  height: 26px !important;
+  font-size: 11px;
+  width: 100%;
+}
+
+.el-breadcrumb__item__inner,
+.el-breadcrumb__separator {
+  color: #000 !important;
+}
+
+.el-breadcrumb__item__inner:hover {
+  cursor: text;
+}
+
+.el-button--text {
+  border-width: 0;
+}
+
+.el-button--primary {
+  border-color: #20a0ff;
+}
+
+.el-dialog__wrapper {
+  outline: 0;
+}
+
+.el-select-dropdown {
+  left: 0 !important;
+}
+
+.el-select-dropdown__item,
+.el-cascader-menu__item {
+  padding: 3px 10px;
+  height: 26px;
+  font-size: 11px;
+}
+
+.el-input__icon {
+  font-size: 12px;
+}
+
+.el-cascader__label {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+}
+
+.el-message-box__btns {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.el-message-box__btns>.el-button {
+  margin-left: 10px;
+}
+
+.el-form-item__error {
+  padding-top: 0;
+  top: 87%;
 }

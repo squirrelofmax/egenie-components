@@ -1,0 +1,134 @@
+.filteritem-wrapper{
+  display:flex;
+  align-items:center;
+  width:20%;
+  min-width:100px;
+}
+
+.filteritem-wrapper>.filteritem-label{
+  flex:0 0 55px;
+  display:inline-flex;
+  justify-content:flex-end;
+  white-space: nowrap;
+  font-size:11px;
+  padding-right:3px;
+  transition: box-shadow .2s cubic-bezier(.645,.045,.355,1);
+  color:#333;
+}
+
+.filteritem-wrapper>.filteritem-label:hover{
+  box-shadow: #bebebe -2px 0 5px 2px;
+}
+.filteritem-wrapper>.el-input{
+  flex: 1 1 130px;
+}
+.filteritem-wrapper>.el-input>.el-input__inner{
+  height: 26px;
+  font-size: 11px;
+  width: 100%;
+}
+
+/*日期控件的样式*/
+.filteritem-wrapper>.el-date-editor{
+  height:26px;
+  flex:1 1 130px;
+}
+
+.filteritem-wrapper>.el-date-editor>.el-input{
+  height:100%;
+  width:100%;
+}
+
+.filteritem-wrapper>.el-date-editor>.el-input>.el-input__inner{
+  height:100%;
+  width:100%;
+  font-size:11px;
+}
+
+.filteritem-wrapper .el-input__icon{
+  width:25px;
+}
+
+.filteritem-wrapper>.el-date-editor>.el-picker-panel.el-date-picker{
+  transform-origin: left top 0px !important;
+  transform: scale(0.65) translateY(36px) !important;
+  z-index:9999 !important;
+}
+
+/*下拉选择select*/
+/*日期控件的样式*/
+.filteritem-wrapper>.el-select{
+  height:26px;
+  flex:1 1 130px;
+}
+
+.filteritem-wrapper>.el-select>.el-input{
+  height:100%;
+  width:100%;
+}
+
+.filteritem-wrapper>.el-select>.el-input>.el-input__inner{
+  height:100%;
+  width:100%;
+  font-size:11px;
+}
+
+.filteritem-wrapper .el-select-dropdown__item>span{
+  font-size:11px;
+}
+
+/*数字*/
+.filteritem-wrapper>.el-input-number{
+  height:26px;
+  flex:1 1 60px;
+}
+
+.filteritem-wrapper>.el-input-number>.el-input{
+  height:100%;
+  width:100%;
+}
+
+.filteritem-wrapper>.el-input-number>.el-input>.el-input__inner{
+  height:100%;
+  width:100%;
+  font-size:11px;
+  padding-right:17px;
+  padding-left:0;
+}
+.filteritem-wrapper>.el-input-number>span{
+  width:16px;
+  height:50%;
+  line-height:1em;
+}
+.filteritem-wrapper>.el-input-number>span:nth-of-type(2){
+  right:0;
+}
+.filteritem-wrapper>.el-input-number>span:nth-of-type(1){
+  top:12px;
+  right:0;
+  border-top:1px solid #bfcbd9;
+}
+
+.filteritem-wrapper>.el-input-number>span>i{
+  transform: scale(0.7);
+}
+
+.filteritem-wrapper .has-value .el-input__inner,.filteritem-wrapper.has-value .el-input__inner{
+  background-color:rgb(250, 230, 205);
+  background-clip:border-box;
+}
+.filteritem-wrapper>.el-date-editor>.el-input.el-date-editor--year>.el-input__inner {
+  text-align: right;
+}
+
+.filteritem-wrapper .el-select__tags {
+  white-space: nowrap;
+  top: 0;
+  transform: translateY(0);
+  overflow: auto;
+  height: 40px;
+}
+
+.filteritem-wrapper .el-select .el-tag {
+  margin-top: 1px;
+}

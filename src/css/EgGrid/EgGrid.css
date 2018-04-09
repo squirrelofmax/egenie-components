@@ -1,0 +1,291 @@
+.EgGrid {
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 100px;
+  flex: 1 1 100px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0;
+  /* flex作为不支持grid的回退版本 */
+  display:grid;
+  grid-template-rows:1fr auto;
+}
+
+.EgGrid>div:not(.el-row) {
+  margin-bottom: 5px;
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 100px;
+  flex: 1 1 100px;
+}
+
+.EgGrid * {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.EgGrid .react-grid-Container {
+  width: 100% !important;
+  height: 100%;
+}
+
+.EgGrid .react-grid-Container>.react-grid-Main {
+  height: 100%;
+}
+
+.EgGrid .react-grid-Container>.react-grid-Main>.react-grid-Grid {
+  height: 100%;
+  min-height: 120px !important;
+}
+
+.EgGrid .react-grid-HeaderRow {
+  overflow-y: scroll;
+  width: 100% !important;
+}
+
+.EgGrid .react-grid-Canvas {
+  overflow-y: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.EgGrid .react-grid-Container .el-select-dropdown {
+  top: 22px !important;
+}
+
+.EgGrid .el-pagination .el-select-dropdown {
+  top: -10px !important;
+  transform:translateY(-100%);
+}
+
+.EgGrid .react-grid-Container+.el-row {
+  margin-bottom: 15px;
+}
+
+.EgGrid .react-grid-HeaderCell {
+  text-align: center;
+  font-size: 11px;
+}
+
+.EgGrid .el-switch.is-checked .el-switch__core {
+  border-color: #20a0ff !important;
+  background-color: #20a0ff !important;
+}
+
+.EgGrid .react-grid-Cell__value {
+  font-size: 11px;
+}
+
+.EgGrid .el-button {
+  font-size: 11px !important;
+}
+
+
+/*控制复选框列*/
+
+.EgGrid .react-grid-checkbox:checked+.react-grid-checkbox-label:before {
+  -webkit-box-shadow: inset 0 0 0 0px #fff;
+  box-shadow: inset 0 0 0 0px #fff;
+  background:#3b99fc;
+  content:'\2713';
+  border-color:#3b99fc !important;
+}
+
+.EgGrid .radio-custom+.radio-custom-label:before, .react-grid-checkbox+.react-grid-checkbox-label:before {
+  content:'\a0';
+  box-sizing:border-box;
+  display: inline-block;
+  vertical-align: .3em !important;
+  width: 14px !important;
+  height: 13px !important;
+  border-radius: .2em;
+  background: #fff;
+  /*水平方向位置text-indent: .15em;*/
+  line-height: .7;
+  padding-top:2px; /*垂直方向位置*/
+  border: 1px solid #989898 !important;
+  color: #fff;
+  font-weight:bold;
+  transform:translateY(3px);
+}
+
+.EgGrid .react-grid-HeaderCell>.react-grid-checkbox-container>.react-grid-checkbox-label {
+  outline: 0;
+  /*top: 30%*/
+}
+
+.EgGrid .react-grid-Grid {
+  border-width: 0;
+}
+
+.EgGrid .react-grid-Cell {
+  padding-right: 0;
+}
+/*单元格选中样式
+.EgGrid .react-grid-Cell:focus {
+  outline: 0px solid #66afe9;
+  outline-offset: -1px;
+  -webkit-box-shadow: -1px -1px 0 1px #66afe9;
+  box-shadow: -1px -1px 0 1px #66afe9;
+  border: 2px solid #66afe9;
+  border-top-width: 0;
+  border-left-width: 0;
+  border-radius: 4px;
+}*/
+
+.EgGrid .react-grid-Cell .checkbox-align {
+  margin-right: 8px;
+}
+
+/*分页器缩小*/
+
+/*.EgGrid .el-pagination {
+  -webkit-transform: scale(0.85);
+  transform: scale(0.85);
+  -webkit-transform-origin: right;
+  transform-origin: right;
+}*/
+/*保证树结构的展开按钮在单元格值为空的情况下也展示*/
+.EgGrid .react-grid-Cell__value{
+  min-height:14px;
+}
+
+
+.EgGrid .react-grid-Row.row-selected, .EgGrid .react-grid-Row .row-selected{
+  background-color:#feffed !important;
+}
+
+
+.EgGrid .react-grid-Grid>.react-grid-Header{
+  height:26px !important;
+}
+
+.EgGrid .react-grid-Grid>.react-grid-Header>.react-grid-HeaderRow{
+  height:28px;
+}
+
+.EgGrid .react-grid-Grid>.react-grid-Header>.react-grid-HeaderRow>div{
+  height:28px !important;
+}
+
+.EgGrid .react-grid-Grid>.react-grid-Header>.react-grid-HeaderRow>div .react-grid-HeaderCell{
+padding:5px 8px 3px !important;
+height:28px !important;
+  color:#333 !important;
+  background-color:#f8f8f8 !important;
+}
+.EgGrid .react-grid-Viewport{
+  top:28px !important;
+}
+.EgGrid .react-grid-Viewport .react-grid-Row{
+   height:33px !important;
+ }
+.EgGrid .react-grid-Viewport .react-grid-Row>.react-grid-Cell{
+  height:33px !important;
+  outline:none;
+}
+.EgGrid .react-grid-Cell.editing{
+  padding-left:8px;
+}
+
+.EgGrid .eg-row-wrapper.cursor .react-grid-Cell {
+  background-color:#fee48d !important;
+}
+
+.EgGrid .react-grid-HeaderCell input[type=checkbox]{
+  width: 59px;
+  height: 26px;
+  top: 0;
+  left: 0;
+}
+
+/*多列表头的样式控制*/
+
+.grid-loading.custom-header-render__multi-columns .EgGrid .react-grid-Grid>.react-grid-Header {
+  height: 38px !important;
+}
+
+.grid-loading.custom-header-render__multi-columns .EgGrid .react-grid-Grid>.react-grid-Header>.react-grid-HeaderRow {
+  height: 39px;
+}
+
+.grid-loading.custom-header-render__multi-columns .EgGrid .react-grid-Grid>.react-grid-Header>.react-grid-HeaderRow>div {
+  height: 38px !important;
+}
+
+.grid-loading.custom-header-render__multi-columns .EgGrid .react-grid-Grid>.react-grid-Header>.react-grid-HeaderRow>div .react-grid-HeaderCell {
+  height: 38px !important;
+  padding: 0 !important;
+}
+
+.grid-loading.custom-header-render__multi-columns .EgGrid .react-grid-Grid>.react-grid-Header>.react-grid-HeaderRow>div .react-grid-HeaderCell .widget-HeaderCell__value {
+  position: relative;
+  top: 10px;
+}
+
+.grid-loading.custom-header-render__multi-columns .EgGrid .react-grid-Grid>.react-grid-Header>.react-grid-HeaderRow>div .react-grid-HeaderCell .react-grid-HeaderCell-sortable {
+  position: relative;
+  top: 10px;
+}
+
+.grid-loading.custom-header-render__multi-columns .EgGrid .react-grid-Viewport {
+  top: 38px !important;
+}
+
+.custom-header-render__multi-columns__formatter {
+  height: 33px;
+  display: flex;
+  align-items: center;
+  text-align: right;
+  width: calc(100% + 8px);
+  margin-left: -8px
+}
+
+.custom-header-render__multi-columns__formatter>span {
+  flex: 1 1 72px;
+  height: 100%;
+  line-height: 2.8;
+  border-right: 1px solid #ddd;
+  position: relative;
+}
+
+.custom-header-render__multi-columns__formatter>span:nth-last-of-type(1) {
+  border-right-width: 0px;
+}
+
+.custom-header-render__multi-columns__formatter>span {
+  display: block;
+  flex: 1 1 30px;
+  height: 100%;
+  line-height: 2.8;
+  border-right: 1px solid #ddd;
+  position: relative;
+}
+
+.custom-header-render__multi-columns__header {
+  height: 100%;
+  display: grid;
+  grid-template-rows: 17px 20px;
+}
+
+.custom-header-render__multi-columns__header>div:nth-of-type(1) {
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.custom-header-render__multi-columns__header>div:nth-of-type(2) {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.custom-header-render__multi-columns__header>div:nth-of-type(2)>span {
+  height: 100%;
+  line-height: 1.8;
+  border-right: 1px solid #ddd;
+  flex: 1 1 72px;
+}
+
+.custom-header-render__multi-columns__header>div:nth-of-type(2)>span:nth-last-of-type(1) {
+  border-right-width: 0px;
+}

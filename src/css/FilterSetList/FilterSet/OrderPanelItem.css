@@ -1,0 +1,131 @@
+.orderpanelitem-wrapper{
+  display:flex;
+  align-items:center;
+  width:33.33% ;
+  padding: 5px 5px 5px 0;
+  box-sizing: border-box;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  cursor:move;
+}
+
+.orderpanelitem-wrapper:hover{
+  box-shadow: #bebebe -2px 0 5px 2px;
+}
+
+.orderpanelitem-wrapper>.orderNo{
+  display: inline-flex;
+  width:55px;
+  align-items: center;
+}
+
+.orderpanelitem-wrapper>.label{
+  display: inline-flex;
+  width:115px;
+  align-items: center;
+  border-left:1px solid #ccc;
+  text-indent: 15px;
+}
+
+.orderpanelitem-wrapper>.orderNo{
+  display: inline-flex;
+  width:55px;
+  align-items: center;
+  justify-content: center;
+}
+
+.orderpanelitem-wrapper>.filteritem-label:hover{
+  box-shadow: #bebebe -2px 0 5px 2px;
+}
+.orderpanelitem-wrapper>.el-input{
+  flex: 1 1 130px;
+}
+.orderpanelitem-wrapper>.el-input>.el-input__inner{
+  height: 26px;
+  font-size: 11px;
+  width: 100%;
+}
+
+/*日期控件的样式*/
+.orderpanelitem-wrapper>.el-date-editor{
+  height:26px;
+  flex:1 1 130px;
+}
+
+.orderpanelitem-wrapper>.el-date-editor>.el-input{
+  height:100%;
+  width:100%;
+}
+
+.orderpanelitem-wrapper>.el-date-editor>.el-input>.el-input__inner{
+  height:100%;
+  width:100%;
+  font-size:11px;
+}
+
+.orderpanelitem-wrapper .el-input__icon{
+  width:25px;
+}
+
+.orderpanelitem-wrapper>.el-date-editor>.el-picker-panel.el-date-picker{
+  transform-origin: left top 0px !important;
+  transform: scale(0.65) translateY(36px) !important;
+}
+
+/*下拉选择select*/
+/*日期控件的样式*/
+.orderpanelitem-wrapper>.el-select{
+  height:26px;
+  flex:1 1 130px;
+}
+
+.orderpanelitem-wrapper>.el-select>.el-input{
+  height:100%;
+  width:100%;
+}
+
+.orderpanelitem-wrapper>.el-select>.el-input>.el-input__inner{
+  height:100%;
+  width:100%;
+  font-size:11px;
+}
+
+.orderpanelitem-wrapper .el-select-dropdown__item>span{
+  font-size:11px;
+}
+
+/*数字*/
+.orderpanelitem-wrapper>.el-input-number{
+  height:26px;
+  flex:1 1 60px;
+}
+
+.orderpanelitem-wrapper>.el-input-number>.el-input{
+  height:100%;
+  width:100%;
+}
+
+.orderpanelitem-wrapper>.el-input-number>.el-input>.el-input__inner{
+  height:100%;
+  width:100%;
+  font-size:11px;
+  padding-right:17px;
+  padding-left:0;
+}
+.orderpanelitem-wrapper>.el-input-number>span{
+  width:16px;
+  height:50%;
+  line-height:1em;
+}
+.orderpanelitem-wrapper>.el-input-number>span:nth-of-type(2){
+  right:0;
+}
+.orderpanelitem-wrapper>.el-input-number>span:nth-of-type(1){
+  top:12px;
+  right:0;
+  border-top:1px solid #bfcbd9;
+}
+
+.orderpanelitem-wrapper>.el-input-number>span>i{
+  transform: scale(0.7);
+}

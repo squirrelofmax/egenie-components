@@ -1,0 +1,389 @@
+
+
+.filterset-wrapper .EgGrid .el-switch.is-checked .el-switch__core {
+    border-color: #000 !important;
+    background-color: #000 !important;
+}
+
+.filterset-wrapper>.main{
+  /*height: calc(100% - 121px)*/
+  overflow:hidden;
+  padding-top:1px;
+}
+.filterset-wrapper>.main>.grid-loading{
+  height:100%;
+  display:flex;
+  padding:0 18px;
+  min-height:160px;
+}
+
+
+.filtergroup-buttons-wrapper{
+  display:flex;
+  flex:0 0 150px;
+  flex-flow:row wrap;
+  padding-left:10px;
+  justify-content: space-between;
+}
+
+.filtergroup-buttons-wrapper>.el-button{
+  margin-bottom:5px;
+  width:46%;
+}
+.filtergroup-buttons-wrapper>.el-button+.el-button{
+  margin-left:0px;
+}
+/*.filtergroup-buttons-wrapper>.el-button.btn-order{
+  margin-top:7px;
+}
+.filtergroup-buttons-wrapper>.el-button:nth-of-type(3){
+  flex:1 0 auto;
+}*/
+.filtergroup-buttons-wrapper>.el-badge{
+  width:46%;
+  margin-bottom:5px;
+}
+.filtergroup-buttons-wrapper>.el-badge>.el-button{
+  width:100%;
+}
+.filtergroup-buttons-wrapper>.el-button:nth-of-type(4){
+  flex-grow:1;
+  transform:translateY(1px);
+}
+
+.filterset-wrapper .count0 .el-badge__content.is-fixed{
+  display: none;
+}
+
+.select-formatter .el-input__inner{
+  height:26px
+}
+
+.el-tabs__item{
+  height:26px;
+  line-height:26px;
+  font-size:11px;
+}
+.saleorder__container .el-tabs__item{
+  padding:2px 16px;
+}
+
+
+.filterset-wrapper>.header>.el-button,
+.filterset-wrapper>.filterset__report__header>.el-button,
+.filterset-wrapper .filterset__subtable__header>.el-button
+{
+  margin-left:0;
+  margin-right:10px;
+}
+
+.filterset-wrapper{
+  display:flex;
+  flex-direction:column;
+  width:100%;
+  height:100%;
+}
+.filterset-wrapper>.header{
+  display:flex;
+  align-items:start;
+  padding:0px 18px 5px;
+  flex-flow:row nowrap;
+  flex: 0 0 28px;
+}
+
+.filtergroup-container {
+  display: flex;
+  align-items: start;
+  padding: 10px 18px 0;
+  flex-flow: row-reverse nowrap;
+  flex: 0 0 63px;
+}
+.filterset-report__tabs-container{
+  display:grid;
+  grid-template-columns:auto;
+  grid-template-rows:36px;
+  margin:0 18px;
+  grid-column-gap:5px;
+  align-items:center;
+}
+.filterset-report__tabs-container.overMax {
+   grid-template-columns:auto [end] 80px;
+}
+.filterset-report__tabs-container.hasOrderBtn{
+  margin-right: 178px;
+  margin-top: -5px;
+  margin-bottom:-5px;
+}
+.filterset-report__tabs-container.expand{
+  grid-template-rows:36px 36px;
+}
+.filterset-report__tabs-wrapper{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  grid-template-rows:40px;
+  grid-row-gap:5px;
+  grid-column-gap:10px;
+  align-items:center;
+}
+.filterset-report__tabs-wrapper.hidden{
+  display:none;
+}
+
+.filterset-report__tabs-tab{
+  height: 30px;
+  border-radius: 15px;
+  background-color: #E4E4E4;
+  text-align: center;
+  line-height: 30px;
+  color: #949499;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.filterset-report__tabs-tab.current{
+  background-color: #6CF;
+  color: #fff;
+}
+.el-button.filterset-report__btn-more{
+  width:70px;
+  justify-self:end;
+}
+.filterset-report__sumcards-wrappper{
+  display:flex;
+  flex-flow:row nowrap;
+  padding-left:18px;
+  padding-top:2px;
+  padding-bottom:6px;
+  margin-top:5px;
+  flex: 0 0 71px;
+}
+.filterset-report__sumcards-card{
+  margin-right: .8%;
+  width: 13.6%;
+  height: 70px;
+  background-color: #fff;
+  border: 1px solid #d1dbe5;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.12), 0 0 6px 0 rgba(0,0,0,.04);
+  display:flex;
+  flex-flow:row nowrap;
+}
+.filterset-report__sumcards-card>.left{
+  width: 40%;
+  height: 100%;
+  font-size: 35px;
+  line-height: 70px;
+}
+.filterset-report__sumcards-card>.left>.back{
+  width: 50px;
+  height: 50px;
+  line-height: 55px;
+  border-radius: 25px;
+  margin: 10px auto;
+  text-align: center;
+  color:#fff;
+}
+.filterset-report__sumcards-card>.right{
+  width: 60%;
+  height: 100%;
+  line-height: 25px;
+}
+.filterset-report__sumcards-card>.right>label{
+  color:#999;
+}
+.filterset-report__sumcards-card>.right>.value{
+  font-size: 18px;
+  font-weight: 700;
+  padding-left: 5px;
+  word-break: break-word;
+}
+
+/*css规整过来的样式*/
+.filterset-top-container{
+  display:flex;
+  flex-direction:column;
+  width:100%;
+  height:100%;
+}
+
+.filterset-top-container>.el-tabs{
+  margin:10px;
+  display:flex;
+  flex-direction: column;
+  flex: 1 1 100px;
+}
+.filterset-top-container>.el-tabs>.el-tabs__content{
+  height:100%;
+  width:100%;
+  padding:0;
+}
+.filterset-top-container>.el-tabs>.el-tabs__content>.el-tab-pane{
+  height:100%;
+}
+
+.filterset-top-container .dropline{
+  display: block;
+  margin:0;
+  height: 4px;
+  cursor: row-resize;
+  background-color: #bebebe;
+  position:relative;
+  margin-bottom:-2px;
+}
+.filterset-top-container .dropline>.center-note{
+  width: 100px;
+  height: 4px;
+  background: #ebebeb;
+  margin: -1px auto;
+  border-radius: 4px;
+  border: 1px solid #bebebe;
+}
+
+.filterset-top-container .subtable{
+  margin: 0;
+  background:#fdfdfd;
+  overflow:hidden;
+}
+
+.filterset-top-container .toggleBtn{
+  position:relative;
+}
+.filterset-top-container .toggleBtn>.btn-wrapper:hover{
+  box-shadow: #bebebe 1px 1px 2px;
+}
+.filterset-top-container .toggleBtn>.btn-wrapper{
+  font-weight: 700;
+  display:block;
+  margin:0 auto;
+  cursor: pointer;
+  height: 18px;
+  color: #1f2d3d;
+  width: 50px;
+  border: thin solid #d1dbe5;
+  text-align:center;
+  background:#fff;
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  top:-20px;
+}
+.filterset-top-container .toggleBtn>.btn-wrapper>i{
+  transform: rotate(90deg);
+}
+
+.filterset-top-container .toggleBtn>.btn-wrapper.fold>i{
+  transform: rotate(270deg);
+}
+.filterset-top-container .subtable{
+  display:flex;
+  flex-flow:column nowrap;
+}
+.filterset-top-container .subtable>.detail-header{
+  position:relative;
+}
+.filterset-top-container .subtable>.detail-header>.tabs{
+  display:flex;
+  padding-top: 2px;
+  background: transparent;
+  border-bottom: 1px solid #ddd;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+.filterset-top-container .subtable>.detail-header>.tabs>.tab{
+  margin-bottom: -1px;
+  padding: 3px 10px;
+  margin-right: 2px;
+  line-height: 1.42857143;
+  border: 1px solid transparent;
+  border-radius: 4px 4px 0 0;
+  color: #20A0FF;
+  cursor:pointer;
+}
+.filterset-top-container .subtable>.detail-header>.tabs>.tab.active,
+.filterset-top-container .subtable>.detail-header>.tabs>.tab:hover{
+  color: #555;
+  border: 1px solid #ddd;
+  border-bottom-color: transparent;
+}
+.filterset-top-container .subtable>.detail-header>.tabs>.tab:hover{
+  background: #f7f7f7;
+  border-color: #eee #eee #ddd;
+}
+.filterset-top-container .subtable>.detail-header>.tabs>.tab.active{
+  border-top: solid 2px #00ABFF;
+  cursor: default;
+  background-color: #fff;
+  border-bottom-color:#fff;
+}
+
+.filterset-top-container .subtable>.detail-header>.fa{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  font-size: 16px;
+  line-height: 28px;
+  color: #475669;
+  cursor: pointer
+}
+
+.filterset-top-container .subtable>.tab-content{
+  flex:1 1 100px;
+}
+
+/*subtable内容样式*/
+.filterset-top-container .subtable>.tab-content{
+  flex:1 1 100px;
+  display:flex;
+  flex-direction:column;
+}
+.filterset-top-container .subtable>.tab-content .tab-content__detail>.right-corner .el-input__inner,
+.filterset-top-container .subtable>.tab-content .tab-content__detail>.right-corner .el-input {
+  height:20px !important;
+}
+
+.filterset-top-container>.el-tabs .el-tabs__item{
+  height:26px;
+  line-height:26px;
+  font-size:11px;
+}
+
+.filterset-wrapper .el-select-dropdown__item{
+  padding:3px 10px;
+  height:26px;
+}
+
+.filterset-wrapper  .el-dropdown-menu__item {
+  line-height:26px;
+}
+
+.filterset-wrapper>.header>.el-button>span,
+.filterset-wrapper>.filterset__report__header>.el-button>span,
+.filterset-wrapper .filterset__subtable__header>.el-button>span
+ {
+  display:flex;
+  flex-flow:row nowrap;
+}
+
+
+.filterset-wrapper .el-select-dropdown {
+  left:0 !important;
+}
+
+.filterset-wrapper .subtable .el-badge__content.is-fixed {
+  top: auto;
+  right: auto;
+  bottom: 0;
+  left: 10px;
+  transform: translateY(50%) translateX(-100%);
+}
+
+.filterset-wrapper .el-select-dropdown__item {
+  font-size:11px;
+}
+.filterset-wrapper .orderpanel-wrapper .el-dialog--small {
+  top: 151px
+}

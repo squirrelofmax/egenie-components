@@ -1,0 +1,79 @@
+.purchase-order-edit .el-form .el-date-editor{
+  width:100%;
+}
+.purchase-order-edit .el-form .el-date-editor.el-input{
+  width:100%;
+}
+
+.purchase-order-edit__grid-container>div{
+  display:flex;
+  height:100%;
+}
+.purchase-order-edit .el-dialog__body{
+  padding:10px 20px;
+}
+
+.purchase-order-edit  .el-form-item{
+  margin-bottom:0;
+}
+
+.purchase-order-edit .el-dialog__header{
+  padding:5px 15px;
+  background-color: #C0E1FD;
+}
+
+.purchase-order-edit__grid-header>.fa{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 5px;
+  font-size: 16px;
+  line-height: 28px;
+  color: #475669;
+  cursor: pointer;
+  z-index:10;
+}
+.purchase-order-edit .count0 .el-badge__content.is-fixed {
+  display: none;
+}
+
+
+/*数字*/
+
+.purchase-order-multi-edit .el-input-number {
+  height: 26px;
+  width:100%;
+}
+
+.purchase-order-multi-edit  .el-input-number>.el-input {
+  height: 100%;
+  width: 100%;
+}
+
+.purchase-order-multi-edit  .el-input-number>.el-input>.el-input__inner {
+  height: 100%;
+  width: 100%;
+  font-size: 11px;
+  padding-right: 17px;
+  padding-left: 0;
+}
+
+.purchase-order-multi-edit  .el-input-number>span {
+  width: 16px;
+  height: 50%;
+  line-height: 1em;
+}
+
+.purchase-order-multi-edit  .el-input-number>span:nth-of-type(2) {
+  right: 0;
+}
+
+.purchase-order-multi-edit  .el-input-number>span:nth-of-type(1) {
+  top: 12px;
+  right: 0;
+  border-top: 1px solid #bfcbd9;
+}
+
+.purchase-order-multi-edit  .el-input-number>span>i {
+  transform: scale(0.7);
+}
