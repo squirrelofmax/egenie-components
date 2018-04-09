@@ -11,19 +11,19 @@ const dealClass = {
   checkElement: (element, cName) => {
     // 检查节点
     let c0 = element.innerHTML !== undefined,
-      c1 = typeof(element.nodeName) === 'string',
-      c2 = typeof(cName) === 'string' 
-      console.log(c0, c1, c2);
+      c1 = typeof (element.nodeName) === 'string',
+      c2 = typeof (cName) === 'string'
+    console.log(c0, c1, c2)
     return c0 && c1 && c2
   },
   hasClass: (element, cName) => {
     // 节点是否拥有组名
-    if (!dealClass.checkElement(element, cName)) {return false}
+    if (!dealClass.checkElement(element, cName)) { return false }
     return element.classList.contains(cName)
   },
   addClass: (element, cName) => {
     // 节点添加组名
-    if (!dealClass.checkElement(element, cName)) {return}
+    if (!dealClass.checkElement(element, cName)) { return }
     element.classList.add(cName)
     return element
   },
@@ -44,7 +44,7 @@ const dealClass = {
   },
   removeClass: (element, cName) => {
     // 节点删除组名
-    if (!dealClass.checkElement(element, cName)) {return}
+    if (!dealClass.checkElement(element, cName)) { return }
     element.classList.remove(cName)
     return element
   },
@@ -65,7 +65,7 @@ const dealClass = {
   },
   toggleClass: (element, cName) => {
     // 切换组名，如果有就删掉，如果没有就添加
-    if (!dealClass.checkElement(element, cName)) {return}
+    if (!dealClass.checkElement(element, cName)) { return }
     element.classList.toggle(cName)
     return element
   },
@@ -83,7 +83,7 @@ const dealClass = {
       dealClass.toggleClass(v, cName)
     })
     return elements
-  },
+  }
 }
 
 const dealCookie = {
@@ -301,8 +301,8 @@ const getLocation = {
     }
     return actualTop
   },
-  toScreenTop() {
-    document.body.scrollTop = document.documentElement.scrollTop = 0;
+  toScreenTop () {
+    document.body.scrollTop = document.documentElement.scrollTop = 0
     return true
   }
 }
@@ -331,8 +331,8 @@ const picture = {
     imgDom.src = pic
     imgDom.onload = () => {
       let [imgW, imgH] = [imgDom.offsetWidth, imgDom.offsetHeight]
-      if (x + imgW > winW) {x -= imgW}
-      if (y + imgH > winH) {y -= imgH}
+      if (x + imgW > winW) { x -= imgW }
+      if (y + imgH > winH) { y -= imgH }
       boxDom.style.cssText = `
         position: absolute;
         z-index: 233;
@@ -345,7 +345,7 @@ const picture = {
   },
   hidePic: function () {
     let toRemove = document.querySelector('#bigerBigerShowImgBox')
-    if (toRemove === null) {return}
+    if (toRemove === null) { return }
     document.body.removeChild(toRemove)
     return true
   }
@@ -353,7 +353,7 @@ const picture = {
 
 const time = {
   // 时间日期处理
-  help_add0: function(s) {
+  help_add0: function (s) {
     // 辅助函数，使个位数变成2位字符串
     return ('00' + s).substr(-2)
   },
@@ -362,20 +362,21 @@ const time = {
     switch (brage) {
       case 'chd':
         re = `${arr[0]}年${arr[1]}月${arr[2]}日`
-        break;
+        break
       case 'cht':
         re = `${arr[0]}时${arr[1]}分${arr[2]}秒`
-        break;
+        break
       default:
         re = arr.join(brage)
-        break;
+        break
     }
     return re
   },
   getDay: function (n, brage = 'no') {
     // 获取距现在天数为n(整数，负或正分别代表前或后)的年月日 或传日期对象
+    // brage 根据brage 确定展示格式
     let [currentDate, toTime, day] = [new Date(), 0, null]
-    switch (typeof(n)) {
+    switch (typeof (n)) {
       case 'object':
         day = n
         break
@@ -399,8 +400,9 @@ const time = {
   },
   getTime: function (n, brage = 'no') {
     // 获取距现在毫秒数为n(整数，负或正分别代表前或后)的时分秒或传 日期对象
+    // brage 根据brage 确定展示格式
     let [currentDate, toTime, day] = [new Date(), 0, null]
-    switch (typeof(n)) {
+    switch (typeof (n)) {
       case 'object':
         day = n
         break
