@@ -5,11 +5,10 @@ import { Message, MessageBox, Button } from 'element-react'
 import {
   getProductList
 } from '../requests'
-import { NumberFormatter } from '@/lib/EgGrid/EditedCellFormatter'
-import ImgFormatter from '@/lib/EgGrid/ImgFormatter'
-import EgGridModel from '@/lib/EgGrid/EgGridModel'
+import {ImgFormatter, EgGridModel, EditedCellFormatter} from '@/lib'
 import mockData from './mock'
 
+const { NumberFormatter } = EditedCellFormatter
 class Search {
   constructor (options) {
     extendObservable(this, {

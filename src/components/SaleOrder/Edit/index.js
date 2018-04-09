@@ -21,7 +21,7 @@ import {
 } from 'element-react'
 
 // modules
-import EgGrid from '@/lib/EgGrid/EgGridMobx.js'
+import {EgGrid} from '@/lib'
 
 const Header = observer(({style,
                            store: { flag, dict, deptProps, _dict,

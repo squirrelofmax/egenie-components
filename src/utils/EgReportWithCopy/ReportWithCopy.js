@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { Button, Dialog, Message, Table } from 'element-react'
 
-import './ReportWithCopy.css'
+import '@/css/ReportWithCopy.css'
 
 class ReportWithCopy extends Component {
   constructor (props) {
@@ -19,7 +19,6 @@ class ReportWithCopy extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-
     // 控制显示、隐藏
     if (nextProps.show !== this.state.show) {
       this.setState(prevState => {
@@ -84,24 +83,23 @@ class ReportWithCopy extends Component {
   render () {
     return (
       <div className='report-with-copy'>
-        <Dialog title={this.state.title} size="small" visible={this.state.show} closeOnClickModal={false}
-                onCancel={this.hideDialog}>
+        <Dialog title={this.state.title} size='small' visible={this.state.show} closeOnClickModal={false}
+          onCancel={this.hideDialog}>
           <Dialog.Body>
             {/* 头部 */}
-            <div className="header">
+            <div className='header'>
               {/* icon图标 */}
-              <div className="eg-dialog-alert dialog-alert-icon">
-                <i className="fa fa-exclamation">
-                </i>
+              <div className='eg-dialog-alert dialog-alert-icon'>
+                <i className='fa fa-exclamation' />
               </div>
               {/* information */}
-              <div className="information">
+              <div className='information'>
                 共处理
-                <span className="total">{this.state.total}</span>
+                <span className='total'>{this.state.total}</span>
                 条，成功
-                <span className="success">{this.state.total - this.state.failure}</span>
+                <span className='success'>{this.state.total - this.state.failure}</span>
                 条，失败
-                <span className="failure">{this.state.failure}</span>
+                <span className='failure'>{this.state.failure}</span>
                 条！
               </div>
             </div>
@@ -112,7 +110,7 @@ class ReportWithCopy extends Component {
                 columns={this.state.columns}
                 maxHeight={300}
                 data={this.state.rows}
-                border={true}
+                border
               />
             </div>
             {/* 底部 */}

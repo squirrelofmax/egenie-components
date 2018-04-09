@@ -6,7 +6,7 @@ import MorePanelModel from './MorePanelModel'
 import OrderPanelModel from './OrderPanelModel'
 import SubTableListModel from './SubTableListModel'
 import ReportListModel from './ReportListModel'
-import EgGridModel from '@/utils/EgGrid/EgGridModel'
+import EgGridModel from '../../../EgGrid/EgGridModel'
 import { Message, MessageBox } from 'element-react'
 
 /**

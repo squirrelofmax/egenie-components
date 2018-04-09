@@ -10,13 +10,12 @@ import {
 } from './requests'
 
 // 模块
-import ImgFormatter from '@/lib/EgGrid/ImgFormatter'
-import TimeStampFormatter from '@/lib/EgGrid/TimeStampFormatter'
-import { SelectFormatter } from '@/lib/EgGrid/EditedCellFormatter'
+import {ImgFormatter, TimeStampFormatter, EditedCellFormatter, FilterSetListModel} from '@/lib'
+
 // model
-import FilterSetListModel from '@/lib/FilterSetList/model'
 import SaleOrderModel from './Edit/models/OrderModel'
 
+const {SelectFormatter} = EditedCellFormatter
 const _getConfig = getConfig()
 
 export default class WrapperOfFilterSetListModel extends FilterSetListModel {

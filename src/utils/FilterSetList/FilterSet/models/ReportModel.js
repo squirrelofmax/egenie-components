@@ -2,7 +2,7 @@ import { extendObservable, action } from 'mobx'
 import shortid from 'shortid'
 // model
 import SubTableListModel from './SubTableListModel'
-import EgGridModel from '@/utils/EgGrid/EgGridModel'
+import EgGridModel from '../../../EgGrid/EgGridModel'
 import { Message } from 'element-react'
 /**
 api:{

@@ -5,7 +5,7 @@ import { observer } from 'mobx-react'
 // 请求
 
 // 模块
-import EgGrid from '@/utils/EgGrid/EgGridMobx'
+import EgGrid from '../../EgGrid/EgGridMobx'
 import FilterGroup from './partials/FilterGroup'
 import MoreFilterPanel from './partials/MoreFilterPanel'
 import OrderPanel from './partials/OrderPanel/OrderPanel'

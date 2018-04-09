@@ -1,4 +1,4 @@
-import egFetch from '@/lib/egFetch'
+import {egFetch} from '@/lib'
 
 export async function getProductList (data) {
   const myInit = {

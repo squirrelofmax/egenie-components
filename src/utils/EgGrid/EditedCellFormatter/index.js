@@ -24,7 +24,7 @@ $('#root').on('focus', '.ejl-grid-cell--editable', function (e) { e.stopPropagat
     })
   .on('click', '.ejl-grid-cell__select .el-select,.ejl-grid-cell__select .el-cascader', function (e) {
     $(this).closest('.react-grid-Cell').addClass('editing')
-    setTimeout(() => window.$(this).focus(), 0)
+    setTimeout(() => $(this).focus(), 0)
   })
 
 export {

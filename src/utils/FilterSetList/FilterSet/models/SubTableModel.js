@@ -1,7 +1,7 @@
 import { extendObservable, action } from 'mobx'
 import shortid from 'shortid'
 // model
-import EgGridModel from '@/utils/EgGrid/EgGridModel'
+import EgGridModel from '../../../EgGrid/EgGridModel'
 import { Message } from 'element-react'
 
 /**

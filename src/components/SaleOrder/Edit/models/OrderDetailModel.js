@@ -3,14 +3,12 @@ import { extendObservable, action, autorun } from 'mobx'
 import { observer } from 'mobx-react'
 import shortid from 'shortid'
 import { Message, MessageBox, Button } from 'element-react'
-import { NumberFormatter, DatePickerFormatter, SelectFormatter, ComputedValueFormatter } from '@/lib/EgGrid/EditedCellFormatter'
-import ImgFormatter from '@/lib/EgGrid/ImgFormatter'
-import EgGridModel from '@/lib/EgGrid/EgGridModel'
+import {ImgFormatter, EgGridModel, EditedCellFormatter} from '@/lib'
 import {
   findEmployeeByVendorId, findStockByWarehouseId
 } from '../requests'
 import { getSaleOrderDetailList } from '../../requests'
-
+const { NumberFormatter, DatePickerFormatter, SelectFormatter, ComputedValueFormatter } = EditedCellFormatter
 export default class OrderDetailModel {
   deleteIds = new Set([])
   removePreErp={

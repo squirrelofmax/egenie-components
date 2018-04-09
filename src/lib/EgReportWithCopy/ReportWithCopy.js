@@ -30,7 +30,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _elementReact = require('element-react');
 
-require('./ReportWithCopy.css');
+require('@/css/ReportWithCopy.css');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
