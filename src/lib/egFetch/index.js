@@ -61,7 +61,8 @@ exports.default = function () {
               break;
             }
 
-            _elementReact.Message.error(result.data);
+            _elementReact.Message.error({ message: '未登录，请重新登录！' });
+            // 返回结果，可处理跳转
             return _context.abrupt('return', result);
 
           case 14:

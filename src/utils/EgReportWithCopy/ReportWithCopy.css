@@ -1,0 +1,53 @@
+.report-with-copy .el-dialog__header {
+  padding: 12px;
+  background-color: #C0E1FD;
+}
+.report-with-copy div.el-dialog__body {
+  padding: 10px 20px;
+}
+.report-with-copy div.button-wrapper {
+  text-align: right;
+}
+.report-with-copy .el-dialog.el-dialog--tiny .el-button {
+  font-size: 12px;
+  padding: 5px 10px;
+}
+.report-with-copy .el-button--warning {
+  border-color: #f7ba2a;
+}
+.report-with-copy .eg-dialog-alert.dialog-alert-icon {
+  position: absolute;
+  width: 55px;
+  height: 55px;
+  line-height: 55px;
+  border: 5px solid orange;
+  border-radius: 50%;
+  font-size: 35px;
+  text-align: center;
+  color: orange;
+  margin-left: 20px;
+}
+.report-with-copy .eg-grid {
+  margin-bottom: 10px;
+}
+.report-with-copy .information {
+  padding-left: 120px;
+  height: 70px;
+  line-height: 70px;
+  font-size: 16px;
+  font-weight: 500;
+}
+.report-with-copy .total {
+  font-size: 22px;
+}
+.report-with-copy .success {
+  font-size: 22px;
+  color: green;
+}
+.report-with-copy .failure {
+  font-size: 22px;
+  color: red;
+}
+.report-with-copy div.header {
+  background-color: #fff;
+}

@@ -424,6 +424,17 @@ const time = {
   }
 }
 
+const setSequence = {
+  // 给数组添加序号，常用于给表格数据添加序号，column字段名为key
+  setOrder: function (list, page, pageSize) {
+    const base = (Number(page) - 1) * Number(pageSize)
+    list.forEach((el, i) => {
+      el.key = i + 1 + base
+    })
+    return list
+  }
+}
+
 
 export default {
   ...dealCookie,
@@ -433,4 +444,5 @@ export default {
   ...getLocation,
   ...picture,
   ...time,
+  ...setSequence
 }
