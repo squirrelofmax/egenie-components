@@ -32,7 +32,7 @@ var _elementReact = require('element-react');
 
 var _mobxReact = require('mobx-react');
 
-var _EgGridMobx = require('@/utils/EgGrid/EgGridMobx');
+var _EgGridMobx = require('../../EgGrid/EgGridMobx');
 
 var _EgGridMobx2 = _interopRequireDefault(_EgGridMobx);
 
@@ -48,7 +48,7 @@ var _OrderPanel = require('./partials/OrderPanel/OrderPanel');
 
 var _OrderPanel2 = _interopRequireDefault(_OrderPanel);
 
-require('@/css/FilterSetList/FilterSet/index.css');
+require('../../../css/FilterSetList/FilterSet/index.css');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

@@ -2,7 +2,7 @@
 import React, { Component } from 'react'
 import { Button, Dialog, Message, Table } from 'element-react'
 
-import '@/css/ReportWithCopy.css'
+import '../../css/ReportWithCopy.css'
 
 class ReportWithCopy extends Component {
   constructor (props) {

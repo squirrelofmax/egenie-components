@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ComputedValueFormatter = exports.MultiSelectFormatter = exports.TreeFormatter = exports.getTreeOptions = exports.getMapOfFieldToEditedCellModel = exports.SelectFormatter = exports.NumberFormatter = exports.DatePickerFormatter = exports.InputFormatter = undefined;
 
-require('@/css/EgGrid/EditedCellFormatter/index.css');
+require('../../../css/EgGrid/EditedCellFormatter/index.css');
 
 var _jquery = require('jquery');
 
@@ -62,7 +62,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
   (0, _jquery2.default)(this).closest('.react-grid-Cell').addClass('editing');
   setTimeout(function () {
-    return window.$(_this).focus();
+    return (0, _jquery2.default)(_this).focus();
   }, 0);
 });
 

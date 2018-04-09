@@ -2,7 +2,7 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import { Input, DatePicker, Select, InputNumber } from 'element-react'
 
-import '@/css/FilterSetList/FilterSet/FilterItem.css'
+import '../../../../css/FilterSetList/FilterSet/FilterItem.css'
 
 const FilterItem = observer(({
                                store: {

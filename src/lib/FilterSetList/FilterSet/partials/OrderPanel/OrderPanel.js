@@ -18,7 +18,7 @@ var _OrderPanelItem = require('./OrderPanelItem');
 
 var _OrderPanelItem2 = _interopRequireDefault(_OrderPanelItem);
 
-require('@/css/FilterSetList/FilterSet/OrderPanel.css');
+require('../../../../../css/FilterSetList/FilterSet/OrderPanel.css');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

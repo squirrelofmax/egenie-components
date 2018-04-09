@@ -1,5 +1,5 @@
 
-import '@/css/EgGrid/EditedCellFormatter/index.css'
+import '../../../css/EgGrid/EditedCellFormatter/index.css'
 import $ from 'jquery'
 import { getMapOfFieldToEditedCellModel, getTreeOptions } from './model'
 import InputFormatter from './InputFormatter'

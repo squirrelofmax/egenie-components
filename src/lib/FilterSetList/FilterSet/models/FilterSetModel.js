@@ -54,7 +54,7 @@ var _ReportListModel = require('./ReportListModel');
 
 var _ReportListModel2 = _interopRequireDefault(_ReportListModel);
 
-var _EgGridModel = require('@/utils/EgGrid/EgGridModel');
+var _EgGridModel = require('../../../EgGrid/EgGridModel');
 
 var _EgGridModel2 = _interopRequireDefault(_EgGridModel);
 

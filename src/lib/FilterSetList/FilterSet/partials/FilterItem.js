@@ -12,7 +12,7 @@ var _mobxReact = require('mobx-react');
 
 var _elementReact = require('element-react');
 
-require('@/css/FilterSetList/FilterSet/FilterItem.css');
+require('../../../../css/FilterSetList/FilterSet/FilterItem.css');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

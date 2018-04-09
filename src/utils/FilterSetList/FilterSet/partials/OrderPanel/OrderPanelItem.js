@@ -2,7 +2,7 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import { Switch } from 'element-react'
 
-import '@/css/FilterSetList/FilterSet/OrderPanelItem.css'
+import '../../../../../css/FilterSetList/FilterSet/OrderPanelItem.css'
 
 const OrderPanelItem = observer(
   ({item, orderNo, onSwitch}) => {

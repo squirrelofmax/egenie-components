@@ -4,7 +4,7 @@ import {DraggableHeader} from 'react-data-grid-addons'
 import { observer } from 'mobx-react'
 import {Pagination, Layout, Loading} from 'element-react'
 
-import '@/css/EgGrid/EgGrid.css'
+import '../../css/EgGrid/EgGrid.css'
 
 /*
 props属性

@@ -4,7 +4,7 @@ import { observer } from 'mobx-react'
 import {Dialog} from 'element-react'
 import FilterItem from './FilterItem'
 // 样式
-import '@/css/FilterSetList/FilterSet/MoreFilterPanel.css'
+import '../../../../css/FilterSetList/FilterSet/MoreFilterPanel.css'
 
 const MoreFilterPanel = observer(
     ({store: {filteritems, MorePanelModel: {show, toggleShow}}}) => {

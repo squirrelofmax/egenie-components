@@ -42,7 +42,7 @@ var _SubTableListModel = require('./SubTableListModel');
 
 var _SubTableListModel2 = _interopRequireDefault(_SubTableListModel);
 
-var _EgGridModel = require('@/utils/EgGrid/EgGridModel');
+var _EgGridModel = require('../../../EgGrid/EgGridModel');
 
 var _EgGridModel2 = _interopRequireDefault(_EgGridModel);
 

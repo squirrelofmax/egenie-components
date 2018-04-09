@@ -26,7 +26,7 @@ var _mobxReact = require('mobx-react');
 
 var _elementReact = require('element-react');
 
-require('@/css/EgGrid/EgGrid.css');
+require('../../css/EgGrid/EgGrid.css');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

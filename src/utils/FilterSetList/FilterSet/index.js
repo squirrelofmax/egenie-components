@@ -12,7 +12,7 @@ import OrderPanel from './partials/OrderPanel/OrderPanel'
 
 // 关联页面
 // 样式
-import '@/css/FilterSetList/FilterSet/index.css'
+import '../../../css/FilterSetList/FilterSet/index.css'
 
 const ButtonsOfSubTable = observer(({store, store: {
   _buttons

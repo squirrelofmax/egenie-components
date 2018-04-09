@@ -14,7 +14,7 @@ var _FilterItem = require('./FilterItem');
 
 var _FilterItem2 = _interopRequireDefault(_FilterItem);
 
-require('@/css/FilterSetList/FilterSet/FilterGroup.css');
+require('../../../../css/FilterSetList/FilterSet/FilterGroup.css');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

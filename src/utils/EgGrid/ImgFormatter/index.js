@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import '@/css/EgGrid/ImgFormatter/ImgFormatter.css'
+import '../../../css/EgGrid/ImgFormatter/ImgFormatter.css'
 
 class ImgFormatter extends Component {
   componentDidMount () {

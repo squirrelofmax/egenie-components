@@ -5,7 +5,7 @@ import {Dialog, Button} from 'element-react'
 import { observer } from 'mobx-react'
 import OrderPanelItem from './OrderPanelItem'
 // 样式
-import '@/css/FilterSetList/FilterSet/OrderPanel.css'
+import '../../../../../css/FilterSetList/FilterSet/OrderPanel.css'
 
 const SortableItem = SortableElement(OrderPanelItem)
 
