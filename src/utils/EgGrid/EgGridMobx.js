@@ -55,7 +55,7 @@ const PagationOfPager = observer(({store: {
 })
 
 const Pager = observer(({store, store: {
-    hiddenPager, hiddenRefresh, hiddenReset, showCheckBox, sumColumns, _rows, columns, onRefresh
+    hiddenPager, hiddenRefresh, hiddenReset, showCheckBox, sumColumns, rows, columns, onRefresh
   }}) => {
   return hiddenPager && hiddenRefresh && (hiddenReset || !showCheckBox) && !(sumColumns && sumColumns.length)
       ? null
@@ -75,11 +75,11 @@ const Pager = observer(({store, store: {
                 const label = (<label key={item ? item.name : ''} style={{marginTop: 2, marginLeft: 10, marginRight: 5}}>{item ? item.name : ''}</label>)
                 let value
                 if (typeof columnKey === 'object') {
-                  value = _rows.reduce((res, row) => {
+                  value = rows.reduce((res, row) => {
                     return res + columnKey.rule(row)
                   }, 0)
                 } else {
-                  value = _rows.reduce((res, row) => {
+                  value = rows.reduce((res, row) => {
                     return res + Number(row[columnKey] || 0)
                   }, 0)
                 }
