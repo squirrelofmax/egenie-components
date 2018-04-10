@@ -345,7 +345,7 @@ export default class FilterSetModel {
 
   reset = action(() => {
     this.filteritems.forEach(item => {
-      item.value = item.initValue
+      item.value = (item.type === 'numbergroup' ? { ...item.initValue } : item.initValue)
     })
   })
 }
