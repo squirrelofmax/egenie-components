@@ -65,6 +65,7 @@ class EditedCellModel {
         return filterable && getFilterable && getFilterable(this.options)
       }
     })
+    this.oldChangeValue = this.value
     this.handleCellValueChange = action((value) => { // 交给外部做，不仅仅改变row的值，还会发生各种联动
       const _value = Array.isArray(value) ? value.toString() : value// 考虑到树形下拉组件传递进来的是个array，且每次只是内部value变，数组还是同一个数组
       if (_value === this.oldChangeValue) return true
