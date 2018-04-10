@@ -51,13 +51,13 @@ const FilterItem = observer(({
   if (type === 'numbergroup') {
     return (<div className={defaultWrapperClassName} style={style} key={id}>
       {defaultLabel}
-      <InputNumber className={(value.min || value.min === 0) ? 'has-value' : ''} defaultValue={value.min == null ? value.min : +value.min}
-        value={value.min == null ? value.min : +value.min} min={0}
+      <InputNumber className={(value.min || value.min === 0) ? 'has-value' : ''} defaultValue={(value.min == null || value.min === '') ? undefined : +value.min}
+        value={(value.min == null || value.min === '') ? undefined : +value.min} min={0}
         max={value.max === '' ? Infinity : value.max - 1}
         onChange={handleNumberGroupChange.bind(this, 'min')} onKeyUp={onKeyUp} />
       <label>至</label>
-      <InputNumber className={value.max ? 'has-value' : ''} defaultValue={value.max == null ? value.max : +value.max}
-        value={value.max == null ? value.max : +value.max} min={value.min ? value.min + 1 : 1} max={Infinity}
+      <InputNumber className={value.max ? 'has-value' : ''} defaultValue={(value.max == null || value.max === '') ? undefined : +value.max}
+        value={(value.max == null || value.max === '') ? undefined : +value.max} min={value.min ? value.min + 1 : 1} max={Infinity}
         onChange={handleNumberGroupChange.bind(this, 'max')} onKeyUp={onKeyUp}
       />
     </div>)
