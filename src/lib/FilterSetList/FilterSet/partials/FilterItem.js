@@ -89,8 +89,8 @@ var FilterItem = (0, _mobxReact.observer)(function (_ref) {
       'div',
       { className: defaultWrapperClassName, style: style, key: id },
       defaultLabel,
-      _react2.default.createElement(_elementReact.InputNumber, { className: value.min || value.min === 0 ? 'has-value' : '', defaultValue: value.min == null ? value.min : +value.min,
-        value: value.min == null ? value.min : +value.min, min: 0,
+      _react2.default.createElement(_elementReact.InputNumber, { className: value.min || value.min === 0 ? 'has-value' : '', defaultValue: value.min == null || value.min === '' ? undefined : +value.min,
+        value: value.min == null || value.min === '' ? undefined : +value.min, min: 0,
         max: value.max === '' ? Infinity : value.max - 1,
         onChange: handleNumberGroupChange.bind(undefined, 'min'), onKeyUp: onKeyUp }),
       _react2.default.createElement(
@@ -98,8 +98,8 @@ var FilterItem = (0, _mobxReact.observer)(function (_ref) {
         null,
         '\u81F3'
       ),
-      _react2.default.createElement(_elementReact.InputNumber, { className: value.max ? 'has-value' : '', defaultValue: value.max == null ? value.max : +value.max,
-        value: value.max == null ? value.max : +value.max, min: value.min ? value.min + 1 : 1, max: Infinity,
+      _react2.default.createElement(_elementReact.InputNumber, { className: value.max ? 'has-value' : '', defaultValue: value.max == null || value.max === '' ? undefined : +value.max,
+        value: value.max == null || value.max === '' ? undefined : +value.max, min: value.min ? value.min + 1 : 1, max: Infinity,
         onChange: handleNumberGroupChange.bind(undefined, 'max'), onKeyUp: onKeyUp
       })
     );

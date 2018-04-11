@@ -39,6 +39,7 @@ var SelectFormatter = (0, _mobxReact.observer)(function (_ref) {
       _elementReact.Select,
       { value: String(value), clearable: clearable, filterable: filterable,
         onChange: function onChange(v) {
+          console.log('执行Select内部的onChange，value：---', v);
           var stop = handleCellValueChange(v);
           if (!stop) handleCellBlur();
         } },

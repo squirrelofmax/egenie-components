@@ -20,7 +20,7 @@ class EditedCellModel {
   oldChangeValue = ''
 
   constructor ({
-      parent = {}, rawRow = {}, field, style = {},
+      parent = {}, rawRow = {}, field, style = {}, type = 'text',
     min = 0, max = Infinity, step = 1, unit = '', // number
     clearable = true,
     filterable = true, getFilterable = (options) => options && options.length > 10,
@@ -42,6 +42,7 @@ class EditedCellModel {
       rawRow,
       field,
       style,
+      type,
       min, // number组件专用
       max, // number组件专用
       step, // number组件专用

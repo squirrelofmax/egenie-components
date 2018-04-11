@@ -10,12 +10,11 @@ import {
 } from './requests'
 
 // 模块
-import {ImgFormatter, TimeStampFormatter, EditedCellFormatter, FilterSetListModel} from '@/lib'
+import { ImgFormatter, TimeStampFormatter, getEditableCellFormatter, FilterSetListModel} from '@/lib'
 
 // model
 import SaleOrderModel from './Edit/models/OrderModel'
 
-const {SelectFormatter} = EditedCellFormatter
 const _getConfig = getConfig()
 
 export default class WrapperOfFilterSetListModel extends FilterSetListModel {
@@ -266,6 +265,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
       config: [
         {
           field: 'deliveryType',
+          type: 'select',
           getOptions: '_dict.deliveryType',
           isDisabled: (cell) => {
             const { isMultiApprove, confirmedStatus, isChecked, isClose } = cell.rawRow
@@ -388,7 +388,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
         resizable: true,
         draggable: true,
         sortable: true,
-        formatter: ({ dependentValues: { mapOfFieldToEditedCellModel } }) => (<SelectFormatter store={mapOfFieldToEditedCellModel['deliveryType']} />),
+        formatter: getEditableCellFormatter('deliveryType'),
         getRowMetaData: row => row
       },
       // {

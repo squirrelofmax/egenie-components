@@ -5,10 +5,9 @@ import { Message, MessageBox, Button } from 'element-react'
 import {
   getProductList
 } from '../requests'
-import {ImgFormatter, EgGridModel, EditedCellFormatter} from '@/lib'
+import { ImgFormatter, EgGridModel, getEditableCellFormatter} from '@/lib'
 import mockData from './mock'
 
-const { NumberFormatter } = EditedCellFormatter
 class Search {
   constructor (options) {
     extendObservable(this, {
@@ -223,7 +222,8 @@ export default class AddGoodsModel {
     return new EgGridModel({
       interceptorOfRows: {
         config: [
-          'saleNum', 'salePrice'
+          { field: 'saleNum', type: 'number' },
+          { field: 'salePrice', type: 'number' }
         ],
         context: this
       },
@@ -333,7 +333,7 @@ export default class AddGoodsModel {
       resizable: true,
       draggable: true,
       sortable: true,
-      formatter: ({ dependentValues: { mapOfFieldToEditedCellModel } }) => (<NumberFormatter store={mapOfFieldToEditedCellModel['saleNum']} />),
+      formatter: getEditableCellFormatter('saleNum'),
       getRowMetaData: row => row
     }, {
       key: 'salePrice',
@@ -342,7 +342,7 @@ export default class AddGoodsModel {
       resizable: true,
       draggable: true,
       sortable: true,
-      formatter: ({ dependentValues: { mapOfFieldToEditedCellModel } }) => (<NumberFormatter store={mapOfFieldToEditedCellModel['salePrice']} />),
+      formatter: getEditableCellFormatter('salePrice'),
       getRowMetaData: row => row
     }, {
       key: 'productName',

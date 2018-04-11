@@ -486,7 +486,7 @@ var _initialiseProps = function _initialiseProps() {
   });
   this.reset = (0, _mobx.action)(function () {
     _this2.filteritems.forEach(function (item) {
-      item.value = item.initValue;
+      item.value = item.type === 'numbergroup' ? (0, _extends3.default)({}, item.initValue) : item.initValue;
     });
   });
 };

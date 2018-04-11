@@ -3,12 +3,11 @@ import { extendObservable, action, autorun } from 'mobx'
 import { observer } from 'mobx-react'
 import shortid from 'shortid'
 import { Message, MessageBox, Button } from 'element-react'
-import {ImgFormatter, EgGridModel, EditedCellFormatter} from '@/lib'
+import { getEditableCellFormatter, EgGridModel, ImgFormatter } from '@/lib'
 import {
   findEmployeeByVendorId, findStockByWarehouseId
 } from '../requests'
 import { getSaleOrderDetailList } from '../../requests'
-const { NumberFormatter, DatePickerFormatter, SelectFormatter, ComputedValueFormatter } = EditedCellFormatter
 export default class OrderDetailModel {
   deleteIds = new Set([])
   removePreErp={
@@ -220,18 +219,21 @@ export default class OrderDetailModel {
         config: [
           {
             field: 'customer',
+            type: 'select',
             getOptions: 'top._dict.customer'
           },
-          'saleNum',
-           { field: 'taxRate', max: 100, unit: '%' },
-          'salePrice',
-          'planSendDate',
+          { field: 'saleNum', type: 'number' },
+          { field: 'taxRate', max: 100, unit: '%', type: 'number' },
+          { field: 'salePrice', type: 'number' },
+          { field: 'planSendDate', type: 'date' },
           {
             field: 'salePriceNoTax',
+            type: 'calc',
             getValue: (row) => (parseFloat(row.salePrice || 0) * 100 / (parseFloat(row.taxRate || 0) + 100)).toFixed(2)
           },
           {
             field: 'XSJE',
+            type: 'calc',
             getValue: (row) => {
               const price = parseFloat(row.salePrice || 0) * 100 / (parseFloat(row.taxRate || 0) + 100)
               return (price * parseFloat(row.saleNum || 0)).toFixed(2)
@@ -239,12 +241,14 @@ export default class OrderDetailModel {
           },
           {
             field: 'XSJEHS',
+            type: 'calc',
             getValue: (row) => {
               return (parseFloat(row.salePrice || 0) * parseFloat(row.saleNum || 0)).toFixed(2)
             }
           },
           {
             field: 'tax',
+            type: 'calc',
             getValue: (row) => {
               const price = parseFloat(row.salePrice || 0) * 100 / (parseFloat(row.taxRate || 0) + 100)
               return (parseFloat(row.salePrice || 0) - price).toFixed(2)
@@ -349,7 +353,7 @@ export default class OrderDetailModel {
         width: 160,
         resizable: true,
         draggable: true,
-        formatter: ({ dependentValues: { mapOfFieldToEditedCellModel } }) => (<SelectFormatter store={mapOfFieldToEditedCellModel['customer']} />),
+        formatter: getEditableCellFormatter('customer'),
         getRowMetaData: row => row
       }, {
         key: 'productName',
@@ -358,7 +362,6 @@ export default class OrderDetailModel {
         resizable: true,
         draggable: true,
         sortable: true,
-        // formatter: ({ dependentValues: { mapOfFieldToEditedCellModel } }) => (<TreeFormatter store={mapOfFieldToEditedCellModel['product_name']} />),
         getRowMetaData: row => row
       }, {
         key: 'productNo',
@@ -406,7 +409,7 @@ export default class OrderDetailModel {
         width: 185,
         resizable: true,
         draggable: true,
-        formatter: ({ dependentValues: { mapOfFieldToEditedCellModel } }) => (<NumberFormatter store={mapOfFieldToEditedCellModel['saleNum']} />),
+        formatter: getEditableCellFormatter('saleNum'),
         getRowMetaData: row => row
       }, {
         key: 'baseUnitId',
@@ -427,7 +430,7 @@ export default class OrderDetailModel {
         width: 85,
         resizable: true,
         draggable: true,
-        formatter: ({ dependentValues: { mapOfFieldToEditedCellModel } }) => (<ComputedValueFormatter store={mapOfFieldToEditedCellModel['salePriceNoTax']} />),
+        formatter: getEditableCellFormatter('salePriceNoTax'),
         getRowMetaData: row => row // formatter: observer(({ value }) => (<div style={{ textAlign: 'right' }}>{value}</div>))
       }, {
         key: 'taxRate',
@@ -435,7 +438,7 @@ export default class OrderDetailModel {
         width: 120,
         resizable: true,
         draggable: true, // InputFormatterForTaxRate
-        formatter: ({ dependentValues: { mapOfFieldToEditedCellModel } }) => (<NumberFormatter store={mapOfFieldToEditedCellModel['taxRate']} />),
+        formatter: getEditableCellFormatter('taxRate'),
         getRowMetaData: row => row
       }, {
         key: 'tax',
@@ -443,7 +446,7 @@ export default class OrderDetailModel {
         width: 85,
         resizable: true,
         draggable: true,
-        formatter: ({ dependentValues: { mapOfFieldToEditedCellModel } }) => (<ComputedValueFormatter store={mapOfFieldToEditedCellModel['tax']} />),
+        formatter: getEditableCellFormatter('tax'),
         getRowMetaData: row => row// formatter: observer(({ value }) => (<div style={{ textAlign: 'right' }}>{value}</div>))
       }, {
         key: 'salePrice',
@@ -451,7 +454,7 @@ export default class OrderDetailModel {
         width: 100,
         resizable: true,
         draggable: true,
-        formatter: ({ dependentValues: { mapOfFieldToEditedCellModel } }) => (<NumberFormatter store={mapOfFieldToEditedCellModel['salePrice']} />),
+        formatter: getEditableCellFormatter('salePrice'),
         getRowMetaData: row => row
       }, {
         key: 'XSJE',
@@ -462,7 +465,7 @@ export default class OrderDetailModel {
         // formatter: observer(({ value }) => (
         //   <div style={{ textAlign: 'right' }}>{value}</div>
         // )),
-        formatter: ({ dependentValues: { mapOfFieldToEditedCellModel } }) => (<ComputedValueFormatter store={mapOfFieldToEditedCellModel['XSJE']} />),
+        formatter: getEditableCellFormatter('XSJE'),
         getRowMetaData: row => row
       }, {
         key: 'XSJEHS',
@@ -473,7 +476,7 @@ export default class OrderDetailModel {
         // formatter: observer(({ value }) => (
         //   <div style={{ textAlign: 'right' }}>{value}</div>
         // )),
-        formatter: ({ dependentValues: { mapOfFieldToEditedCellModel } }) => (<ComputedValueFormatter store={mapOfFieldToEditedCellModel['XSJEHS']} />),
+        formatter: getEditableCellFormatter('XSJEHS'),
         getRowMetaData: row => row
       }, {
         key: 'planSendDate',
@@ -481,7 +484,7 @@ export default class OrderDetailModel {
         width: 220,
         resizable: true,
         draggable: true,
-        formatter: ({ dependentValues: { mapOfFieldToEditedCellModel } }) => (<DatePickerFormatter store={mapOfFieldToEditedCellModel['planSendDate']} />),
+        formatter: getEditableCellFormatter('planSendDate'),
         getRowMetaData: row => row
       }
       // ...(this.top.flag === 'edit' ? [{

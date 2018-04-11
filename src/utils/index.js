@@ -8,7 +8,7 @@ import EgGrid from './EgGrid/EgGridMobx'
 import EgGridModel from './EgGrid/EgGridModel'
 import ImgFormatter from './EgGrid/ImgFormatter'
 import TimeStampFormatter from './EgGrid/TimeStampFormatter'
-import * as EditedCellFormatter from './EgGrid/EditedCellFormatter'
+import { getEditableCellFormatter } from './EgGrid/EditedCellFormatter'
 
 export {
 egFetch,
@@ -17,5 +17,5 @@ EgReportWithCopy,
 FilterSetList, FilterSetListModel,
 EgGrid, EgGridModel,
 ImgFormatter, TimeStampFormatter,
-EditedCellFormatter
+getEditableCellFormatter
 }

@@ -57,6 +57,8 @@ var EditedCellModel = function EditedCellModel(_ref) {
       field = _ref.field,
       _ref$style = _ref.style,
       style = _ref$style === undefined ? {} : _ref$style,
+      _ref$type = _ref.type,
+      type = _ref$type === undefined ? 'text' : _ref$type,
       _ref$min = _ref.min,
       min = _ref$min === undefined ? 0 : _ref$min,
       _ref$max = _ref.max,
@@ -118,6 +120,7 @@ var EditedCellModel = function EditedCellModel(_ref) {
     rawRow: rawRow,
     field: field,
     style: style,
+    type: type,
     min: min, // number组件专用
     max: max, // number组件专用
     step: step, // number组件专用
@@ -141,6 +144,7 @@ var EditedCellModel = function EditedCellModel(_ref) {
       return filterable && getFilterable && getFilterable(this.options);
     }
   });
+  this.oldChangeValue = this.value;
   this.handleCellValueChange = (0, _mobx.action)(function (value) {
     // 交给外部做，不仅仅改变row的值，还会发生各种联动
     var _value = Array.isArray(value) ? value.toString() : value; // 考虑到树形下拉组件传递进来的是个array，且每次只是内部value变，数组还是同一个数组

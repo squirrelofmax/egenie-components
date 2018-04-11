@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.EditedCellFormatter = exports.TimeStampFormatter = exports.ImgFormatter = exports.EgGridModel = exports.EgGrid = exports.FilterSetListModel = exports.FilterSetList = exports.EgReportWithCopy = exports.egFunc = exports.egFetch = undefined;
+exports.getEditableCellFormatter = exports.TimeStampFormatter = exports.ImgFormatter = exports.EgGridModel = exports.EgGrid = exports.FilterSetListModel = exports.FilterSetList = exports.EgReportWithCopy = exports.egFunc = exports.egFetch = undefined;
 
 var _egFetch = require('./egFetch');
 
@@ -43,10 +43,6 @@ var _TimeStampFormatter2 = _interopRequireDefault(_TimeStampFormatter);
 
 var _EditedCellFormatter = require('./EgGrid/EditedCellFormatter');
 
-var EditedCellFormatter = _interopRequireWildcard(_EditedCellFormatter);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.egFetch = _egFetch2.default;
@@ -58,4 +54,4 @@ exports.EgGrid = _EgGridMobx2.default;
 exports.EgGridModel = _EgGridModel2.default;
 exports.ImgFormatter = _ImgFormatter2.default;
 exports.TimeStampFormatter = _TimeStampFormatter2.default;
-exports.EditedCellFormatter = EditedCellFormatter;
+exports.getEditableCellFormatter = _EditedCellFormatter.getEditableCellFormatter;

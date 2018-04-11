@@ -105,7 +105,7 @@ var Pager = (0, _mobxReact.observer)(function (_ref3) {
       hiddenReset = _ref3$store.hiddenReset,
       showCheckBox = _ref3$store.showCheckBox,
       sumColumns = _ref3$store.sumColumns,
-      _rows = _ref3$store._rows,
+      rows = _ref3$store.rows,
       columns = _ref3$store.columns,
       onRefresh = _ref3$store.onRefresh;
 
@@ -159,11 +159,11 @@ var Pager = (0, _mobxReact.observer)(function (_ref3) {
         );
         var value = void 0;
         if ((typeof columnKey === 'undefined' ? 'undefined' : (0, _typeof3.default)(columnKey)) === 'object') {
-          value = _rows.reduce(function (res, row) {
+          value = rows.reduce(function (res, row) {
             return res + columnKey.rule(row);
           }, 0);
         } else {
-          value = _rows.reduce(function (res, row) {
+          value = rows.reduce(function (res, row) {
             return res + Number(row[columnKey] || 0);
           }, 0);
         }

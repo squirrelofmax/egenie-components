@@ -15,6 +15,7 @@ const SelectFormatter = observer(({store, store: {
                 ? getLabelByValue(value, options)
                 : <Select value={String(value)} clearable={clearable} filterable={filterable}
                   onChange={(v) => {
+                    console.log('执行Select内部的onChange，value：---', v)
                     const stop = handleCellValueChange(v)
                     if (!stop) handleCellBlur()
                   }}>
