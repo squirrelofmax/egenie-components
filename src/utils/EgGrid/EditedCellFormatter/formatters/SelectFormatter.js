@@ -35,5 +35,5 @@ export default SelectFormatter
 
 function getLabelByValue (value, options) {
   const item = options.find(el => String(el.value) === String(value))
-  return item ? item.label : ''
+  return item ? item.label : value
 }
