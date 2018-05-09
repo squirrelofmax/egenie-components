@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDataGrid from 'react-data-grid'
-import { extendObservable, action, intercept, observable } from 'mobx'
+import { extendObservable, action, intercept, observable, set} from 'mobx'
 import { getMapOfFieldToEditedCellModel } from './EditedCellFormatter'
 import { observer } from 'mobx-react'
 import shortid from 'shortid'
@@ -12,10 +12,11 @@ api:{
 }
 */
 export default class EgGridModel {
-  constructor ({ columns, interceptorOfRows, getDisplayRows, api = {}, ...options }) {
+  constructor ({ columns, interceptorOfRows, getDisplayRows, api = {}, parent = {}, ...options }) {
     this.api = api
     this.setRowRender()
     extendObservable(this, {
+      parent,
       id: shortid.generate(),
       _class: '', // 特殊样式的类
       columns: this.prevHandleColumns(columns),
@@ -67,8 +68,9 @@ export default class EgGridModel {
       return change
     })
 
+    interceptorOfRows = typeof interceptorOfRows === 'function' ? interceptorOfRows(this) : interceptorOfRows
     if (interceptorOfRows) {
-      intercept(this, 'rows', typeof interceptorOfRows === 'function' ? interceptorOfRows : (change) => {
+      intercept(this, 'rows', (change) => {
         change.newValue = this.getMapOfFieldToEditedCellModel(change.newValue, interceptorOfRows)
         return change
       })
@@ -76,6 +78,7 @@ export default class EgGridModel {
   }
   // 工具方法
   prevHandleRows = (rows) => {
+    if (!rows || !rows.length) return []
     const {size, currentPage} = this
     rows = rows.map((el, index) => {
       el = {...el}
@@ -149,6 +152,7 @@ export default class EgGridModel {
   // actions
   setWrapperRef = action((wrapperRef) => { this.wrapperRef = wrapperRef })
   pageChange = action((currentPage) => {
+    this.resetCursorRow()
     const { size, api: { onPageChange } } = this
     this.showCheckBox && this.resetHeaderCheckBox() // 重置表头勾选框
     // pageChange与sizeChange不需要物理上reset，需要清空状态值expanded，这样渲染时自动就重置了
@@ -162,6 +166,7 @@ export default class EgGridModel {
     }
   })
   sizeChange = action((size) => {
+    this.resetCursorRow()
     const { showCheckBox, resetHeaderCheckBox, api: { onSizeChange } } = this
     showCheckBox && resetHeaderCheckBox() // 重置表头勾选框
     this.currentPage = 1
@@ -321,12 +326,12 @@ export default class EgGridModel {
       this.cursorIdx = rowIdx
       this.cursorRow = row
     }
-    row && (this.beforeIdx !== this.cursorIdx) && this.api && this.api.onRowClick && this.api.onRowClick(row[this.primaryKeyField], row)
+    row && (this.beforeIdx !== this.cursorIdx) && this.triggerCursorRowClick()
   })
   onRefresh = action(() => {
     if (this.api.onRefresh) {
       this.loading = true
-      this.resetHeaderCheckBox()
+      // this.resetHeaderCheckBox()
       this.api.onRefresh()
     }
   })
@@ -335,6 +340,32 @@ export default class EgGridModel {
     this.selectedKeyValues = []
     this.cashSelectedRows = []
     this.api.onEgRowSelectChange && this.api.onEgRowSelectChange()
+  })
+
+  resetCursorRow = action(() => {
+    this.beforeIdx = this.cursorIdx
+    this.cursorIdx = ''
+    this.cursorRow = {}
+    this.triggerCursorRowClick()
+  })
+
+  setCursorRowToFirst = action(() => {
+    if (!(this.rows && this.rows.length)) return this.resetCursorRow()
+    this.beforeIdx = this.cursorIdx
+    this.cursorIdx = 0
+    this.cursorRow = this.rows[0]
+    this.triggerCursorRowClick()
+  })
+
+  triggerCursorRowClick = action(() => {
+    this.api && this.api.onRowClick && this.api.onRowClick(this.cursorRow[this.primaryKeyField], this.cursorRow)
+  })
+
+  clearToOriginal = action(() => { // 主表清空字表
+    set(this, {
+      rows: [], total: 0, currentPage: 1, selectedKeyValues: [], cashSelectedRows: [], expanded: {}, treeCash: {}, cursorIdx: '', cursorRow: {}
+    })
+    this.resetHeaderCheckBox()
   })
 
   /**
@@ -351,4 +382,18 @@ export default class EgGridModel {
       return el
     }))
   }
+
+  callbackAfterRefresh = action(({ add, edit, remove }) => {
+    if (add) return this.gridModel.setCursorRowToFirst()
+    if (edit) return this.gridModel.triggerCursorRowClick()
+    if (remove) {
+      const { cashSelectedRows, selectedKeyValues, primaryKeyField, cursorRow } = this.gridModel
+      const id = cursorRow[primaryKeyField]
+      const cashItem = cashSelectedRows.find(el => el[primaryKeyField] == id)
+      cashItem && cashSelectedRows.remove(cashItem)
+      const selectedId = selectedKeyValues.find(el => el == id)
+      selectedId && selectedKeyValues.remove(selectedId)
+      return this.gridModel.resetCursorRow()
+    }
+  })
 }

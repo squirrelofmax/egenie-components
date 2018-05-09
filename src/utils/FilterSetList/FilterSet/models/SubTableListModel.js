@@ -34,9 +34,9 @@ export default class SubTableListModel {
 
   setListModel = action((list) => {
     this.listModel = list.map(el => {
-      const { grid: { getColumns, ...restOfGrid } } = el
-      const grid = { columns: getColumns(this.top), ...restOfGrid }
-      return new SubTableModel({ ...el, grid, parent: this, top: this.top })
+      // const { grid: { getColumns, ...restOfGrid } } = el
+      // const grid = { columns: getColumns(this.top), ...restOfGrid }
+      return new SubTableModel({ ...el, parent: this, top: this.top })
     }, this)
   })
 
@@ -45,6 +45,7 @@ export default class SubTableListModel {
     if (id == null || id !== cursorRow[primaryKeyField]) return
     console.log('执行resetWhenDeleteCursorRowOfMainGrid')
     this.top.gridModel.cursorRow = {}
+    this.top.gridModel.cursorIdx = ''
     this.listModel.forEach(el => {
       set(el.gridModel, {
         rows: [], total: 0, currentPage: 1, selectedKeyValues: [], cashSelectedRows: [], expanded: {}, treeCash: {}

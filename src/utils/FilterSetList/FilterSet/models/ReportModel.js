@@ -104,6 +104,7 @@ export default class ReportModel {
   }
 
   onSearch = action(() => {
+    this.gridModel.resetCursorRow()
     this.gridModel.resetHeaderCheckBox() // 重置表头的勾选框
     this.gridModel.loading = true
     const data = this.searchData
@@ -118,7 +119,7 @@ export default class ReportModel {
     this.gridModel.expanded = {}
     this.gridModel.cashSelectedRows = []
   })
-  queryDataAndSetState = action((data, isSearch) => {
+  queryDataAndSetState = action((data, isSearch, flagOfRefresh = {}) => {
     const tabValue = this.tab.value
     const _data = JSON.parse(JSON.stringify(data))
     this.api.queryData && this.api.queryData(_data, tabValue, this).then(action(v => {
@@ -136,10 +137,12 @@ export default class ReportModel {
       if (v.status !== 'Successful') {
         this.gridModel.rows = []
         this.gridModel.total = 0
+        this.gridModel.callbackAfterRefresh(flagOfRefresh)
         return Message.error(v.data)
       }
       this.gridModel.rows = v.data ? v.data.list : []
       this.gridModel.total = v.data ? v.data.totalCount : 0
+      this.gridModel.callbackAfterRefresh(flagOfRefresh)
     }))
   })
   prevHandleDataFromInner = action((innerState) => {
@@ -163,9 +166,10 @@ export default class ReportModel {
       }))
     }))
   })
-  onRefresh = action(() => {
+  onRefresh = action((flagKey) => {
     const data = this.top.history
-    this.queryDataAndSetState(data)
+    const flagObj = flagKey ? { [flagKey]: true } : {}
+    this.queryDataAndSetState(data, null, flagObj)
   })
   onSortAll = action(({ sidx, sord }) => {
     const data = { ...this.history, sidx, sord }
@@ -191,7 +195,8 @@ export default class ReportModel {
         onSortAll, // 排序
         onRowClick, // 行点击
         onRefresh
-      }
+      },
+      parent: this
     })
   })
   setSubTablesModel = action((subTables) => {

@@ -21,7 +21,7 @@ const SelectFormatter = observer(({store, store: {
                   }}>
                   {options && options.length
                     ? options.map(function ({label, value}) {
-                      return (<Select.Option label={label} value={String(value)} key={label} />)
+                      return (<Select.Option label={label} value={String(value)} key={label + ',' + value} />)
                     })
                     : <span />
                   }

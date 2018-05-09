@@ -10,7 +10,7 @@ api:{
 }
  */
 export default class SubTableModel {
-  constructor ({ api, grid, getButtons = () => [], ...options }) {
+  constructor ({ api, grid: { getColumns, ...grid }, getButtons = () => [], ...options }) {
     this.api = api
     extendObservable(this, {
       parent: {},
@@ -19,14 +19,14 @@ export default class SubTableModel {
       tab: {name: '', value: ''},
       id: shortid.generate(),
       gridModel: {},
-      filteritems: [], // {label,field,,value}
+      filteritems: [], // {label,field,,value,type,options}
       allFilteritemsInOneGroup: true,
       clearAfterChangeFilteritem: false, // 改变filteritem后是否清空
       cursorFilteritemField: '',
       buttons: getButtons(this),
       get buttonsPassPermissionValidate () {
         if (!this.buttons.length) return this.buttons
-        const { permissionOfButton } = this.parent
+        const { permissionOfButton } = this.top.parent
         const buttons = this.buttons.map((el, idx) => { // 给group按钮加idx属性
           const { group } = el
           if (!group) return { ...el }
@@ -117,14 +117,18 @@ export default class SubTableModel {
     // 配置
     this.gridModel = new EgGridModel({
       ...grid,
+      columns: getColumns(this.top, this),
       api: {
         onPageChange: handlePageOrSizeChange,
         onSizeChange: handlePageOrSizeChange,
         onSortAll, // 排序
         onRowClick, // 行点击
         onRefresh
-      }
+      },
+      parent: this
     })
+
+    this.api.queryData = this.requestOry(this.api.queryData)
   }
 
   /**
@@ -164,7 +168,10 @@ export default class SubTableModel {
   queryDataAndSetState = action((data) => {
     const { cursorRow, primaryKeyField } = this.top.gridModel
     const pid = cursorRow[primaryKeyField]
-    if (!pid) return (this.gridModel.loading = false)
+    if (!pid) {
+      this.gridModel.clearToOriginal()
+      return (this.gridModel.loading = false)
+    }
     this.api.queryData && this.api.queryData(data, pid, cursorRow, this.gridModel).then(action(v => { // gridModel用于设置动态列columns
       const searched = this.top.subTablesModel.tabsFlag.searched
       this.top.subTablesModel.tabsFlag.searched = { ...searched, [this.tab.value]: true }
@@ -181,7 +188,7 @@ export default class SubTableModel {
       }
       this.gridModel.rows = v.data ? this.gridModel.hiddenPager ? v.data : v.data.list : []
       this.gridModel.total = v.data && !this.gridModel.hiddenPager ? v.data.totalCount : 0
-    }))
+    }), msg => console.log(msg))
   })
 
   prevHandleDataFromInner = action((innerState) => {
@@ -219,5 +226,18 @@ export default class SubTableModel {
     const {type, value, options} = item
     if (type === 'select') return (options.find((el) => el.value === value) || {}).label || ''
     return value || ''
+  }
+  // 包装子表的查询接口，如果快速多次调用查询接口，忽略前边的请求，只接受最后一个请求返回的数据
+  requestOry = (queryData) => {
+    let rejectOfLastRequest = null
+    let i = 0
+    return (...args) => {
+      i++
+      if (rejectOfLastRequest) rejectOfLastRequest(`忽略对subTable的第${i}次请求`)
+      return new Promise((resolve, reject) => {
+        rejectOfLastRequest = reject
+        queryData.apply(this, args).then(v => resolve(v))
+      })
+    }
   }
 }

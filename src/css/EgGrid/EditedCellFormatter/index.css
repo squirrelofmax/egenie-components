@@ -87,3 +87,7 @@
     text-align:center !important;
     margin-left: -8px;
 }
+
+.ejl-grid-cell--editable.red .el-input__inner{
+    color:red;
+}

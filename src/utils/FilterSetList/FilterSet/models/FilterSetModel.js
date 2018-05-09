@@ -223,6 +223,7 @@ export default class FilterSetModel {
       if (cursorTabModel) { cursorTabModel.onSearch() }
       return
     }
+    this.gridModel.resetCursorRow()
     this.gridModel.resetHeaderCheckBox() // 重置表头的勾选框
     const data = this.searchData
     /// /console.log(data, '点击搜索')
@@ -236,7 +237,7 @@ export default class FilterSetModel {
     this.gridModel.cashSelectedRows = []
   })
 
-  queryDataAndSetState= action((data) => {
+  queryDataAndSetState= action((data, flagOfRefresh = {}) => {
     this.gridModel.loading = true
     this.history = {...data}
     this.api.queryData && this.api.queryData(data, this).then(action(v => {
@@ -246,10 +247,12 @@ export default class FilterSetModel {
       if (v.status !== 'Successful') {
         this.gridModel.rows = []
         this.gridModel.total = 0
+        this.gridModel.callbackAfterRefresh(flagOfRefresh)
         return Message.error(v.data)
       }
       this.gridModel.rows = v.data.list
       this.gridModel.total = v.data.totalCount
+      this.gridModel.callbackAfterRefresh(flagOfRefresh)
     }))
   })
 
@@ -266,9 +269,10 @@ export default class FilterSetModel {
     this.queryDataAndSetState(data)
   })
 
-  onRefresh= action(() => {
+  onRefresh= action((flagKey) => {
     const data = this.history
-    this.queryDataAndSetState(data)
+    const flagObj = flagKey ? { [flagKey]: true } : {}
+    this.queryDataAndSetState(data, flagObj)
   })
 
   onSortAll= action(({ sidx, sord }) => {
@@ -298,7 +302,8 @@ export default class FilterSetModel {
         onSortAll, // 排序
         onRowClick, // 行点击
         onRefresh
-      }
+      },
+      parent: this
     })
   })
 

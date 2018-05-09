@@ -387,3 +387,8 @@
 .filterset-wrapper .orderpanel-wrapper .el-dialog--small {
   top: 151px
 }
+
+.filterset__subtable__header .el-button--small{
+  padding:0 9px;
+  height:22px;
+}

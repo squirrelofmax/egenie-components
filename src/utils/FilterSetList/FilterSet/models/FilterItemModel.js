@@ -30,9 +30,9 @@ export default class FilterItemModel {
           const {min = '', max = ''} = value
           return (!min && !max) ? '' : min + ',' + max
         }
-        if (label === '省' || label === '市' || label === '区县') {
-          const item = options && options.find(ssq => ssq[valueField] === value)
-          return (item ? item[labelField] : '') + ''
+        if (type === 'tree') {
+          if (!value || !value.length) return ''
+          return value[value.length - 1] + ''
         }
         return value + ''
       },
@@ -56,6 +56,11 @@ export default class FilterItemModel {
   })
 
   handleSelectChange = action(value => {
+    this.handleValueChange(value)
+  })
+
+  handleTreeChange = action((value) => {
+    console.log('执行handleTreeChange，Value：', value)
     this.handleValueChange(value)
   })
 

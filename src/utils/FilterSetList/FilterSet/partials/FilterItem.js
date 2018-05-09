@@ -1,13 +1,14 @@
 import React from 'react'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
-import { Input, DatePicker, Select, InputNumber } from 'element-react'
+import { Input, DatePicker, Select, InputNumber, Cascader } from 'element-react'
 
 import '../../../../css/FilterSetList/FilterSet/FilterItem.css'
 
 const FilterItem = observer(({
                                store: {
-                                 id, type, label, hiddenColon, labelStyle, value, index, options, labelField, valueField, display = true,
-                                 handleNumberGroupChange, handleTextChange, handleDateChange, handleSelectChange, onKeyUp, clearable, disabledDate, handleYearChange
+                                 id, type, label, hiddenColon, labelStyle, value, index, options, labelField, valueField, display = true, treeProps,
+                                 handleNumberGroupChange, handleTextChange, handleDateChange, handleSelectChange, onKeyUp, clearable, disabledDate, handleYearChange, handleTreeChange
                                }
                              }) => {
   const defaultLabel = (
@@ -88,6 +89,14 @@ const FilterItem = observer(({
           : ''
         }
       </Select>
+    </div>)
+  }
+
+  if (type === 'tree') {
+    return (<div className={defaultWrapperClassName} style={style}>
+      {defaultLabel}
+      <Cascader className={value && value.length ? 'has-value' : ''} value={(value || []).slice(0)} onChange={handleTreeChange} options={toJS(options)} props={treeProps} filterable clearable changeOnSelect showAllLevels={false}
+        beforeFilter={() => (Promise.resolve(true))} />
     </div>)
   }
 })
