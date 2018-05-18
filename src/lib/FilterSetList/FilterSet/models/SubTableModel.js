@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _promise = require('babel-runtime/core-js/promise');
+
+var _promise2 = _interopRequireDefault(_promise);
+
 var _assign = require('babel-runtime/core-js/object/assign');
 
 var _assign2 = _interopRequireDefault(_assign);
@@ -54,7 +58,9 @@ var SubTableModel = function () {
     var _this = this;
 
     var api = _ref.api,
-        grid = _ref.grid,
+        _ref$grid = _ref.grid,
+        getColumns = _ref$grid.getColumns,
+        grid = (0, _objectWithoutProperties3.default)(_ref$grid, ['getColumns']),
         _ref$getButtons = _ref.getButtons,
         getButtons = _ref$getButtons === undefined ? function () {
       return [];
@@ -104,7 +110,10 @@ var SubTableModel = function () {
           primaryKeyField = _top$gridModel.primaryKeyField;
 
       var pid = cursorRow[primaryKeyField];
-      if (!pid) return _this.gridModel.loading = false;
+      if (!pid) {
+        _this.gridModel.clearToOriginal();
+        return _this.gridModel.loading = false;
+      }
       _this.api.queryData && _this.api.queryData(data, pid, cursorRow, _this.gridModel).then((0, _mobx.action)(function (v) {
         // gridModel用于设置动态列columns
         var searched = _this.top.subTablesModel.tabsFlag.searched;
@@ -122,7 +131,9 @@ var SubTableModel = function () {
         }
         _this.gridModel.rows = v.data ? _this.gridModel.hiddenPager ? v.data : v.data.list : [];
         _this.gridModel.total = v.data && !_this.gridModel.hiddenPager ? v.data.totalCount : 0;
-      }));
+      }), function (msg) {
+        return console.log(msg);
+      });
     });
     this.prevHandleDataFromInner = (0, _mobx.action)(function (innerState) {
       var history = _this.history;
@@ -150,6 +161,25 @@ var SubTableModel = function () {
 
     });
 
+    this.requestOry = function (queryData) {
+      var rejectOfLastRequest = null;
+      var i = 0;
+      return function () {
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
+
+        i++;
+        if (rejectOfLastRequest) rejectOfLastRequest('\u5FFD\u7565\u5BF9subTable\u7684\u7B2C' + i + '\u6B21\u8BF7\u6C42');
+        return new _promise2.default(function (resolve, reject) {
+          rejectOfLastRequest = reject;
+          queryData.apply(_this, args).then(function (v) {
+            return resolve(v);
+          });
+        });
+      };
+    };
+
     this.api = api;
     (0, _mobx.extendObservable)(this, (0, _extends4.default)({
       parent: {},
@@ -158,14 +188,14 @@ var SubTableModel = function () {
       tab: { name: '', value: '' },
       id: _shortid2.default.generate(),
       gridModel: {},
-      filteritems: [], // {label,field,,value}
+      filteritems: [], // {label,field,,value,type,options}
       allFilteritemsInOneGroup: true,
       clearAfterChangeFilteritem: false, // 改变filteritem后是否清空
       cursorFilteritemField: '',
       buttons: getButtons(this),
       get buttonsPassPermissionValidate() {
         if (!this.buttons.length) return this.buttons;
-        var permissionOfButton = this.parent.permissionOfButton;
+        var permissionOfButton = this.top.parent.permissionOfButton;
 
         var buttons = this.buttons.map(function (el, idx) {
           // 给group按钮加idx属性
@@ -214,9 +244,10 @@ var SubTableModel = function () {
             _gridModel = this.gridModel,
             cashOn = _gridModel.cashOn,
             cashSelectedRows = _gridModel.cashSelectedRows;
-        // 如果没有cashRows就不处理直接返回
+        // 如果没有cashRows就不处理直接返回,这种处理方式被废弃
 
-        if (!buttonsPassPermissionValidate.length || !cashOn || !cashSelectedRows || !cashSelectedRows.length) return buttonsPassPermissionValidate;
+        if (!buttonsPassPermissionValidate.length) return buttonsPassPermissionValidate;
+        if (!cashOn || !cashSelectedRows || !cashSelectedRows.length) cashSelectedRows = [];
         return buttonsPassPermissionValidate.map(function (button) {
           var group = button.group,
               firstButton = (0, _objectWithoutProperties3.default)(button, ['group']);
@@ -287,14 +318,18 @@ var SubTableModel = function () {
     // 配置
 
     this.gridModel = new _EgGridModel2.default((0, _extends4.default)({}, grid, {
+      columns: getColumns(this.top, this),
       api: {
         onPageChange: handlePageOrSizeChange,
         onSizeChange: handlePageOrSizeChange,
         onSortAll: onSortAll, // 排序
         onRowClick: onRowClick, // 行点击
         onRefresh: onRefresh
-      }
+      },
+      parent: this
     }));
+
+    this.api.queryData = this.requestOry(this.api.queryData);
   }
 
   /**
@@ -320,6 +355,8 @@ var SubTableModel = function () {
       }) || {}).label || '';
       return value || '';
     }
+    // 包装子表的查询接口，如果快速多次调用查询接口，忽略前边的请求，只接受最后一个请求返回的数据
+
   }]);
   return SubTableModel;
 }();

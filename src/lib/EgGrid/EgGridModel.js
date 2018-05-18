@@ -4,9 +4,25 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _slicedToArray2 = require('babel-runtime/helpers/slicedToArray');
+
+var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+
+var _entries = require('babel-runtime/core-js/object/entries');
+
+var _entries2 = _interopRequireDefault(_entries);
+
+var _promise = require('babel-runtime/core-js/promise');
+
+var _promise2 = _interopRequireDefault(_promise);
+
 var _isNan = require('babel-runtime/core-js/number/is-nan');
 
 var _isNan2 = _interopRequireDefault(_isNan);
+
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
 
 var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
 
@@ -58,6 +74,8 @@ var _shortid = require('shortid');
 
 var _shortid2 = _interopRequireDefault(_shortid);
 
+var _requests = require('./requests');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // model
@@ -73,10 +91,14 @@ var EgGridModel = function () {
 
     var columns = _ref.columns,
         interceptorOfRows = _ref.interceptorOfRows,
+        _ref$user = _ref.user,
+        user = _ref$user === undefined ? _requests.getUser : _ref$user,
         getDisplayRows = _ref.getDisplayRows,
         _ref$api = _ref.api,
         api = _ref$api === undefined ? {} : _ref$api,
-        options = (0, _objectWithoutProperties3.default)(_ref, ['columns', 'interceptorOfRows', 'getDisplayRows', 'api']);
+        _ref$parent = _ref.parent,
+        parent = _ref$parent === undefined ? {} : _ref$parent,
+        options = (0, _objectWithoutProperties3.default)(_ref, ['columns', 'interceptorOfRows', 'user', 'getDisplayRows', 'api', 'parent']);
     (0, _classCallCheck3.default)(this, EgGridModel);
 
     _initialiseProps.call(this);
@@ -84,7 +106,10 @@ var EgGridModel = function () {
     this.api = api;
     this.setRowRender();
     (0, _mobx.extendObservable)(this, (0, _extends3.default)({
+      parent: parent,
       id: _shortid2.default.generate(),
+      cache: _requests.cache,
+      user: '',
       _class: '', // 特殊样式的类
       columns: this.prevHandleColumns(columns),
       rows: [],
@@ -107,11 +132,14 @@ var EgGridModel = function () {
       hiddenRefresh: false, // 是否隐藏刷新按钮
       hiddenReset: false, // 是否隐藏重置按钮
       hiddenPager: false, // 是否隐藏分页器
+      gridIdForColumnConfig: '',
       // 非state中的属性
       sumColumns: [],
       refreshWhenRowsSelectChange: false, // 貌似跟表格没关系，就算有关系，用mobx也可以省略之
       cashOn: false,
       sortAll: false,
+      cacheColumnConfig: true,
+      // ignoreCacheChange: true,
       wrapperRef: {},
       get _size() {
         return this.size ? Number(this.size) : 0;
@@ -124,23 +152,36 @@ var EgGridModel = function () {
         var rows = this.rows;
 
         if (!getDisplayRows) return this.prevHandleRows(rows);
-        return getDisplayRows(this.prevHandleRows(rows), rows); // 传源rows的目的是在产生可编辑单元格的model时可以直接操作当前行
+        var ret = getDisplayRows(this.prevHandleRows(rows), rows);
+        return ret; // 传源rows的目的是在产生可编辑单元格的model时可以直接操作当前行
       },
       get rowsCount() {
         return this._rows.length;
+      },
+      get _columns() {
+        var ret = this.columns.filter(function (el) {
+          return !el.ejlHidden;
+        });
+        ret.sort(function (a, b) {
+          return a.ejlIndex - b.ejlIndex;
+        });
+        return ret;
+      },
+      get cacheKeyForColumnsConfig() {
+        return this.user + '__' + this.gridIdForColumnConfig;
       }
     }, options || {}));
 
-    (0, _mobx.intercept)(this, 'columns', function (change) {
-      change.newValue = _this.prevHandleColumns(change.newValue);
-      return change;
-    });
-
+    interceptorOfRows = typeof interceptorOfRows === 'function' ? interceptorOfRows(this) : interceptorOfRows;
     if (interceptorOfRows) {
-      (0, _mobx.intercept)(this, 'rows', typeof interceptorOfRows === 'function' ? interceptorOfRows : function (change) {
+      (0, _mobx.intercept)(this, 'rows', function (change) {
         change.newValue = _this.getMapOfFieldToEditedCellModel(change.newValue, interceptorOfRows);
         return change;
       });
+    }
+    if (this.cacheColumnConfig) {
+      this.getUser(user);
+      (0, _mobx.autorun)(this.updateColumnsWhenCacheChange);
     }
   }
   // 工具方法
@@ -233,6 +274,57 @@ var EgGridModel = function () {
         return el;
       }));
     }
+  }, {
+    key: 'parseJSON',
+    value: function parseJSON(str) {
+      var ret = void 0;
+      try {
+        ret = JSON.parse(str);
+      } catch (e) {
+        var temp = void 0,
+            i = void 0,
+            j = void 0,
+            kv = void 0;
+        if (str.startsWith('[')) {
+          try {
+            str = str.slice(2, str.length - 2).split('},{');
+            temp = [];
+            for (var _i = 0, len = str.length; _i < len; _i++) {
+              var item = str[_i].split(','),
+                  obj = {};
+              for (j = 0; j < item.length; j++) {
+                kv = item[j].split(':');
+                obj[kv[0]] = kv[1];
+              }
+              temp.push(obj);
+            }
+            ret = temp;
+          } catch (e) {
+            ret = null;
+            console.warn('parseJSON 失败', str);
+          }
+        } else {
+          try {
+            str = str.slice(1, str.length - 1).split(',');
+            temp = {};
+            for (i = 0; i < str.length; i++) {
+              kv = str[i].split(':');
+              temp[kv[0]] = kv[1];
+            }
+            ret = temp;
+          } catch (e) {
+            ret = null;
+            console.warn('parseJSON 失败', str);
+          }
+        }
+      }
+      for (var key in ret) {
+        try {
+          ret[key] = JSON.parse(ret[key]);
+        } catch (e) {}
+      }
+      return ret;
+    }
   }]);
   return EgGridModel;
 }();
@@ -241,6 +333,7 @@ var _initialiseProps = function _initialiseProps() {
   var _this4 = this;
 
   this.prevHandleRows = function (rows) {
+    if (!rows || !rows.length) return [];
     var size = _this4.size,
         currentPage = _this4.currentPage;
 
@@ -267,8 +360,7 @@ var _initialiseProps = function _initialiseProps() {
     var columns = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
     if (!columns.length) return columns;
-    if (columns[0].key === 'gridOrderNo') return columns;
-    return [{
+    columns = columns[0].key === 'gridOrderNo' ? columns : [{
       key: 'gridOrderNo',
       width: 50,
       name: '序号',
@@ -285,6 +377,9 @@ var _initialiseProps = function _initialiseProps() {
         return row;
       }
     }].concat((0, _toConsumableArray3.default)(columns));
+    return columns.map(function (el, index) {
+      return (0, _extends3.default)({ ejlHidden: false }, el, { ejlOriginalIndex: index, ejlIndex: index });
+    });
   };
 
   this.rowGetter = function (i) {
@@ -295,6 +390,7 @@ var _initialiseProps = function _initialiseProps() {
     _this4.wrapperRef = wrapperRef;
   });
   this.pageChange = (0, _mobx.action)(function (currentPage) {
+    _this4.resetCursorRow();
     var size = _this4.size,
         onPageChange = _this4.api.onPageChange;
 
@@ -310,6 +406,7 @@ var _initialiseProps = function _initialiseProps() {
     }
   });
   this.sizeChange = (0, _mobx.action)(function (size) {
+    _this4.resetCursorRow();
     var showCheckBox = _this4.showCheckBox,
         resetHeaderCheckBox = _this4.resetHeaderCheckBox,
         onSizeChange = _this4.api.onSizeChange;
@@ -325,23 +422,50 @@ var _initialiseProps = function _initialiseProps() {
     }
   });
   this.handleHeaderDrop = (0, _mobx.action)(function (source, target) {
-    // console.log(source, target, '--source, target--列拖拽')
-    var columnSourceIndex = _this4.columns.findIndex(function (i) {
+    var _copy;
+
+    if (source === target) return;
+    var copy = _this4.columns.slice(0);
+    copy.sort(function (a, b) {
+      return a.ejlIndex - b.ejlIndex;
+    });
+    var columnSourceIndex = copy.findIndex(function (i) {
       return i.key === source;
     });
-    var columnTargetIndex = _this4.columns.findIndex(function (i) {
+    var columnTargetIndex = copy.findIndex(function (i) {
       return i.key === target;
     });
-    var copy = _this4.columns.slice(0);
-    copy.splice(columnTargetIndex, 0, copy.splice(columnSourceIndex, 1)[0]);
-    //  要先清空columns 再赋值
+    copy[columnSourceIndex].ejlIndex = columnTargetIndex;
+    var indexChangeDirection = columnSourceIndex < columnTargetIndex ? -1 : 1;
+    var params = columnSourceIndex < columnTargetIndex ? [columnSourceIndex + 1, columnTargetIndex + 1] : [columnTargetIndex, columnSourceIndex];
+    (_copy = copy).slice.apply(_copy, params).forEach(function (el) {
+      el.ejlIndex += indexChangeDirection;
+    });
+    copy = _this4.columns.slice(0); // 只改ejlIndex，不更改数组顺序
+    //  要先清空columns 再赋值，必须！涉及到了DraggableHeader组件
     _this4.columns = [];
-    setTimeout(function () {
-      _this4.columns = copy;
-    }, 0);
+    setTimeout((0, _mobx.action)(function () {
+      return _this4.columns = copy;
+    }), 0);
+    // 保存columnsConfig到后端以及localStorage
+    if (!_this4.cacheColumnConfig) return;
+    var configObj = copy.reduce(function (res, column) {
+      var ejlIndex = column.ejlIndex,
+          ejlOriginalIndex = column.ejlOriginalIndex;
+
+      if (ejlOriginalIndex !== ejlIndex) res[ejlOriginalIndex] = ejlIndex;
+      return res;
+    }, {});
+    _this4.saveColumnsConfig(configObj);
+  });
+  this.saveColumnsConfig = (0, _mobx.action)(function (config) {
+    var data = {
+      cacheKey: _this4.cacheKeyForColumnsConfig,
+      cacheValue: (0, _stringify2.default)(config)
+    };
+    (0, _requests.saveColumnsConfig)(data);
   });
   this.handleGridSort = (0, _mobx.action)(function (sortColumn, sortDirection) {
-    // console.log(sortColumn, sortDirection, '--sortColumn, sortDirection--执行列排序')
     if (sortDirection === 'ASC') {
       _this4.defaultRows = _this4._rows.slice(0);
     }
@@ -375,13 +499,11 @@ var _initialiseProps = function _initialiseProps() {
     // setTimeout(() => { this.comp.forceUpdate() })// 树结构按钮都归位,TODO,需要强制刷新？如果需要，只能找Grid的Ref了
   });
   this.handleGridSortAll = (0, _mobx.action)(function (sortColumn, sortDirection) {
-    // console.log(sortColumn, sortDirection, '--sortColumn, sortDirection--执行列排序')
     var param = sortDirection === 'NONE' ? {} : { sidx: sortColumn, sord: sortDirection.toLowerCase() };
     _this4.api.onSortAll && _this4.api.onSortAll(param);
   });
   this.getSubRowDetails = (0, _mobx.action)(function (rowItem) {
     if (_this4.treeField) {
-      // console.log('执行getSubRowDetails方法') // 随滚动条实时刷新
       var _rowKeyValue = rowItem[_this4.primaryKeyField];
       var isExpanded = !!_this4.expanded[_rowKeyValue];
       return { // 该节点的信息+其children，后者用假数据，只为了保证展开按钮存在。信息貌似也没啥用处----Grid组件内部用
@@ -406,7 +528,6 @@ var _initialiseProps = function _initialiseProps() {
         expanded[rowKeyValue] = false;
         rows.splice(rowIndex + 1, subRows.length);
       }
-      // console.log(this, rows, '第一次Expand的最后一步')
     };
 
     var defaultSubRows = [{}];
@@ -484,17 +605,18 @@ var _initialiseProps = function _initialiseProps() {
     });
   });
   this.onRowClick = (0, _mobx.action)(function (rowIdx, row) {
+    // console.log('EgGrid内部的onRowClick')
     if (~rowIdx) {
       _this4.beforeIdx = _this4.cursorIdx;
       _this4.cursorIdx = rowIdx;
       _this4.cursorRow = row;
     }
-    row && _this4.beforeIdx !== _this4.cursorIdx && _this4.api && _this4.api.onRowClick && _this4.api.onRowClick(row[_this4.primaryKeyField], row);
+    row && _this4.beforeIdx !== _this4.cursorIdx && _this4.triggerCursorRowClick();
   });
   this.onRefresh = (0, _mobx.action)(function () {
     if (_this4.api.onRefresh) {
       _this4.loading = true;
-      _this4.resetHeaderCheckBox();
+      // this.resetHeaderCheckBox()
       _this4.api.onRefresh();
     }
   });
@@ -504,6 +626,105 @@ var _initialiseProps = function _initialiseProps() {
     _this4.cashSelectedRows = [];
     _this4.api.onEgRowSelectChange && _this4.api.onEgRowSelectChange();
   });
+  this.resetCursorRow = (0, _mobx.action)(function () {
+    _this4.beforeIdx = _this4.cursorIdx;
+    _this4.cursorIdx = '';
+    _this4.cursorRow = {};
+    _this4.triggerCursorRowClick();
+  });
+  this.setCursorRowToFirst = (0, _mobx.action)(function () {
+    if (!(_this4.rows && _this4.rows.length)) return _this4.resetCursorRow();
+    _this4.beforeIdx = _this4.cursorIdx;
+    _this4.cursorIdx = 0;
+    _this4.cursorRow = _this4.rows[0];
+    _this4.triggerCursorRowClick();
+  });
+  this.triggerCursorRowClick = (0, _mobx.action)(function () {
+    _this4.api && _this4.api.onRowClick && _this4.api.onRowClick(_this4.cursorRow[_this4.primaryKeyField], _this4.cursorRow);
+  });
+  this.clearToOriginal = (0, _mobx.action)(function () {
+    // 主表清空字表
+    (0, _mobx.set)(_this4, {
+      rows: [], total: 0, currentPage: 1, selectedKeyValues: [], cashSelectedRows: [], expanded: {}, treeCash: {}, cursorIdx: '', cursorRow: {}
+    });
+    _this4.resetHeaderCheckBox();
+  });
+  this.callbackAfterRefresh = (0, _mobx.action)(function (_ref4) {
+    var add = _ref4.add,
+        edit = _ref4.edit,
+        remove = _ref4.remove;
+
+    if (add) return _this4.gridModel.setCursorRowToFirst();
+    if (edit) return _this4.gridModel.triggerCursorRowClick();
+    if (remove) {
+      var _gridModel = _this4.gridModel,
+          cashSelectedRows = _gridModel.cashSelectedRows,
+          selectedKeyValues = _gridModel.selectedKeyValues,
+          primaryKeyField = _gridModel.primaryKeyField,
+          cursorRow = _gridModel.cursorRow;
+
+      var id = cursorRow[primaryKeyField];
+      var cashItem = cashSelectedRows.find(function (el) {
+        return el[primaryKeyField] == id;
+      });
+      cashItem && cashSelectedRows.remove(cashItem);
+      var selectedId = selectedKeyValues.find(function (el) {
+        return el == id;
+      });
+      selectedId && selectedKeyValues.remove(selectedId);
+      return _this4.gridModel.resetCursorRow();
+    }
+  });
+  this.getUser = (0, _mobx.action)(function (user) {
+    if (typeof user === 'function') {
+      return _promise2.default.resolve(user()).then((0, _mobx.action)(function (v) {
+        if (!v) return;
+        _this4.user = v.username;
+      })).then(_this4.getColumnsConfig);
+    }
+    _promise2.default.resolve(user).then((0, _mobx.action)(function (v) {
+      _this4.user = v;
+    })).then(_this4.getColumnsConfig);
+  });
+  this.getColumnsConfig = (0, _mobx.action)(function () {
+    // 只会在页面初始化的时候调用
+    (0, _requests.getColumnsConfig)(_this4.cacheKeyForColumnsConfig).then((0, _mobx.action)(function (v) {
+      if (v.status !== 'Successful') return;
+      // this.ignoreCacheChange = true
+      _requests.cache.setStorage({ cacheKey: _this4.cacheKeyForColumnsConfig, cacheValue: v.data || '{}' });
+      if (!v.data) return;
+      // this.updateColumnsWhenCacheChange()
+      _this4.updateColumns(v.data);
+      var copy = _this4.columns.slice(0);
+      _this4.columns = [];
+      setTimeout((0, _mobx.action)(function () {
+        _this4.columns = copy;
+      }), 0);
+    }));
+  });
+
+  this.updateColumnsWhenCacheChange = function () {
+    // if (this.ignoreCacheChange) return (this.ignoreCacheChange = false)
+    var columnsConfig = _requests.cache.value[_this4.cacheKeyForColumnsConfig];
+    if (!columnsConfig) return;
+    _this4.updateColumns(columnsConfig);
+  };
+
+  this.updateColumns = function (columnsConfig) {
+    if (!_this4.columns.length) return;
+    _this4.columns.forEach(function (el) {
+      el.ejlIndex = el.ejlOriginalIndex;
+    });
+    var params = {};
+    params = _this4.parseJSON(columnsConfig);
+    (0, _entries2.default)(params).forEach(function (_ref5) {
+      var _ref6 = (0, _slicedToArray3.default)(_ref5, 2),
+          key = _ref6[0],
+          value = _ref6[1];
+
+      _this4.columns[key].ejlIndex = value;
+    });
+  };
 };
 
 exports.default = EgGridModel;

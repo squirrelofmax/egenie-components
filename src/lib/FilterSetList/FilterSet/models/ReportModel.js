@@ -128,9 +128,10 @@ var ReportModel = function ReportModel(_ref) {
           _gridModel = this.gridModel,
           cashOn = _gridModel.cashOn,
           cashSelectedRows = _gridModel.cashSelectedRows;
-      // 如果没有cashRows就不处理直接返回
+      // 如果没有cashRows就不处理直接返回,这种处理方式被废弃
 
-      if (!buttonsPassPermissionValidate.length || !cashOn || !cashSelectedRows || !cashSelectedRows.length) return buttonsPassPermissionValidate;
+      if (!buttonsPassPermissionValidate.length) return buttonsPassPermissionValidate;
+      if (!cashOn || !cashSelectedRows || !cashSelectedRows.length) cashSelectedRows = [];
       return buttonsPassPermissionValidate.map(function (button) {
         var group = button.group,
             firstButton = (0, _objectWithoutProperties3.default)(button, ['group']);
@@ -190,6 +191,7 @@ var _initialiseProps = function _initialiseProps() {
   var _this = this;
 
   this.onSearch = (0, _mobx.action)(function () {
+    _this.gridModel.resetCursorRow();
     _this.gridModel.resetHeaderCheckBox(); // 重置表头的勾选框
     _this.gridModel.loading = true;
     var data = _this.searchData;
@@ -210,6 +212,8 @@ var _initialiseProps = function _initialiseProps() {
     _this.gridModel.cashSelectedRows = [];
   });
   this.queryDataAndSetState = (0, _mobx.action)(function (data, isSearch) {
+    var flagOfRefresh = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
     var tabValue = _this.tab.value;
     var _data = JSON.parse((0, _stringify2.default)(data));
     _this.api.queryData && _this.api.queryData(_data, tabValue, _this).then((0, _mobx.action)(function (v) {
@@ -229,10 +233,12 @@ var _initialiseProps = function _initialiseProps() {
       if (v.status !== 'Successful') {
         _this.gridModel.rows = [];
         _this.gridModel.total = 0;
+        _this.gridModel.callbackAfterRefresh(flagOfRefresh);
         return _elementReact.Message.error(v.data);
       }
       _this.gridModel.rows = v.data ? v.data.list : [];
       _this.gridModel.total = v.data ? v.data.totalCount : 0;
+      _this.gridModel.callbackAfterRefresh(flagOfRefresh);
     }));
   });
   this.prevHandleDataFromInner = (0, _mobx.action)(function (innerState) {
@@ -259,13 +265,14 @@ var _initialiseProps = function _initialiseProps() {
       }));
     }));
   });
-  this.onRefresh = (0, _mobx.action)(function () {
+  this.onRefresh = (0, _mobx.action)(function (flagKey) {
     var data = _this.top.history;
-    _this.queryDataAndSetState(data);
+    var flagObj = flagKey ? (0, _defineProperty3.default)({}, flagKey, true) : {};
+    _this.queryDataAndSetState(data, null, flagObj);
   });
-  this.onSortAll = (0, _mobx.action)(function (_ref2) {
-    var sidx = _ref2.sidx,
-        sord = _ref2.sord;
+  this.onSortAll = (0, _mobx.action)(function (_ref3) {
+    var sidx = _ref3.sidx,
+        sord = _ref3.sord;
 
     var data = (0, _extends4.default)({}, _this.history, { sidx: sidx, sord: sord });
     _this.queryDataAndSetState(data);
@@ -294,7 +301,8 @@ var _initialiseProps = function _initialiseProps() {
         onSortAll: onSortAll, // 排序
         onRowClick: onRowClick, // 行点击
         onRefresh: onRefresh
-      }
+      },
+      parent: _this
     }));
   });
   this.setSubTablesModel = (0, _mobx.action)(function (subTables) {

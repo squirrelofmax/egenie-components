@@ -55,7 +55,7 @@ const PagationOfPager = observer(({store: {
 })
 
 const Pager = observer(({store, store: {
-    hiddenPager, hiddenRefresh, hiddenReset, showCheckBox, sumColumns, rows, columns, onRefresh
+    hiddenPager, hiddenRefresh, hiddenReset, showCheckBox, sumColumns, rows, _columns, onRefresh
   }}) => {
   return hiddenPager && hiddenRefresh && (hiddenReset || !showCheckBox) && !(sumColumns && sumColumns.length)
       ? null
@@ -71,7 +71,8 @@ const Pager = observer(({store, store: {
             {sumColumns && sumColumns.length
               ? sumColumns.reduce((res, columnKey) => {
                 let item
-                if (typeof columnKey === 'object') { item = columns.find(el => el.key === columnKey.key) } else { item = columns.find(el => el.key === columnKey) }
+                if (typeof columnKey === 'object') { item = _columns.find(el => el.key === columnKey.key) } else { item = _columns.find(el => el.key === columnKey) }
+                if (!item) return res
                 const label = (<label key={item ? item.name : ''} style={{marginTop: 2, marginLeft: 10, marginRight: 5}}>{item ? item.name : ''}</label>)
                 let value
                 if (typeof columnKey === 'object') {
@@ -97,6 +98,7 @@ const EgGrid = observer((props) => {
   const {
       _class,
       columns,
+    _columns,
       // rows,
       // size,
       // total,
@@ -145,7 +147,7 @@ const EgGrid = observer((props) => {
     <Loading className={'grid-loading' + (_class ? ' ' + _class : '')}loading={loading} style={{display: 'flex', height: '100%', flexFlow: 'column nowrap', ...style}}>
       <div key='1' className='EgGrid' ref={setWrapperRef}>
         <DraggableHeader.DraggableContainer key='1' onHeaderDrop={handleHeaderDrop}>
-          <ReactDataGrid columns={columns.slice(0)} rowGetter={rowGetter} rowsCount={rowsCount} onGridSort={sortAll ? handleGridSortAll : handleGridSort}
+          <ReactDataGrid columns={_columns.slice(0)} rowGetter={rowGetter} rowsCount={rowsCount} onGridSort={sortAll ? handleGridSortAll : handleGridSort}
             getSubRowDetails={getSubRowDetails} onCellExpand={onCellExpand} rowSelection={{
               showCheckbox: !!showCheckBox,
               enableShiftSelect: true,

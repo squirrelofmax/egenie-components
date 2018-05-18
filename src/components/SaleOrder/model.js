@@ -246,6 +246,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
   ]
 
   getGrid = () => ({
+    gridIdForColumnConfig: 'omsSaleOrder_filterset_mainGrid',
     getColumns: this.getColumns, // 获取columns配置的接口，传进去在FilterSetModel构造器中调用，调用时会把FilterSetModel的实例传进来当参数
     _class: '', // 设置Grid最外层div的class
     interceptorOfRows: this.getInterceptor(),
@@ -526,7 +527,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
             }))
           })
         },
-        display: (rows) => rows.every(el => {
+        display: (rows) => rows.length && rows.every(el => {
           if (!el.isMultiApprove) { // 不是多级审批。。。未关闭，未审核
             return (!el.isClose || el.isClose == 4) && (!el.isChecked)
           }
@@ -552,7 +553,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
                 }))
               })
             },
-            display: (rows) => rows.every(el => {
+            display: (rows) => rows.length && rows.every(el => {
               // 每一个都未关闭(或拒绝关闭)，已审核,且发送未完成
               return !el.isMultiApprove && (!el.isClose || el.isClose == 4) && (el.isChecked == 1) && (el.sendStatus == 2 || !el.sendStatus)
             })
@@ -574,7 +575,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
         },
         icon: 'icon-audit',
         // 每一个都是多级审批，未确认，未关闭， ---未审核
-        display: (rows) => rows.every(el => (el.isMultiApprove == 1) && (el.canConfirmCheck == 0) && (el.confirmedStatus == 0 || el.confirmedStatus == 3) && (!el.isClose || el.isClose == 4) && (el.isChecked != 1))
+        display: (rows) => rows.length && rows.every(el => (el.isMultiApprove == 1) && (el.canConfirmCheck == 0) && (el.confirmedStatus == 0 || el.confirmedStatus == 3) && (!el.isClose || el.isClose == 4) && (el.isChecked != 1))
       }, {
         permissionId: '262',
         text: '确认并审核',
@@ -591,7 +592,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
         },
         icon: 'icon-audit',
         // 每一个都是多级审批，可确认审批,未确认，未关闭， ---未审核
-        display: (rows) => rows.every(el => (el.isMultiApprove == 1) && (el.canConfirmCheck == 1) && (el.confirmedStatus == 0 || el.confirmedStatus == 3) && (!el.isClose || el.isClose == 4) && (el.isChecked != 1))
+        display: (rows) => rows.length && rows.every(el => (el.isMultiApprove == 1) && (el.canConfirmCheck == 1) && (el.confirmedStatus == 0 || el.confirmedStatus == 3) && (!el.isClose || el.isClose == 4) && (el.isChecked != 1))
       },
       {
         permissionId: '84',
@@ -612,6 +613,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
         },
         display: (rows) => {
           // 选中1行且该行未关闭，已审核
+          if (!rows.length) return false
           if (rows.length > 1) return false
           const item = rows[0]
           return (!item.isClose || item.isClose == 4) && item.isChecked == 1
@@ -631,7 +633,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
             permissionId: '243',
             text: '打印2',
             icon: 'icon-barcode',
-            display: (rows) => rows.every(el => {
+            display: (rows) => rows.length && rows.every(el => {
               return false
             }),
             handleClick: () => {
@@ -671,7 +673,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
             }))
           })
         },
-        display: (rows) => rows.every(el => { // 已审核，未关闭
+        display: (rows) => rows.length && rows.every(el => { // 已审核，未关闭
           const { isChecked, isClose } = el
           return (isClose == null || isClose == 0 || isClose == 4) && (isChecked == 1)
         })
@@ -683,7 +685,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
         handleClick: () => {
           console.log('点击了生成送货单按钮')
         },
-        display: (rows) => rows.every(el => {
+        display: (rows) => rows.length && rows.every(el => {
           const { isMultiApprove, confirmedStatus, isChecked, isClose, sendStatus } = el
           return sendStatus != 1 && (isClose == null || isClose == 0 || isClose == 4) && (isChecked == 1) && (!isMultiApprove || confirmedStatus == 2)
         })
@@ -705,7 +707,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
             }))
           })
         },
-        display: (rows) => rows.every(el => {
+        display: (rows) => rows.length && rows.every(el => {
           return false
         }),
         group: [
@@ -727,6 +729,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
               })
             },
             display: (rows) => {
+              if (!rows.length) return false
               if (rows.length > 1) return false
               const item = rows[0]
               return item.isClose == 2
@@ -739,9 +742,10 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
         permissionId: '257',
         text: '导入',
         icon: 'icon-import',
-        handleClick: () => {
+        handleClick: action(() => {
+          filterset.gridModel.columns[2].ejlHidden = !filterset.gridModel.columns[2].ejlHidden
           console.log('点击了导入按钮')
-        },
+        }),
         // display: (rows) => rows.every(el => {
         //   return true
         // })
@@ -812,6 +816,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
   })
 
   getSubDetailGrid =() => ({
+    gridIdForColumnConfig: 'omsSaleOrder_filterset_subGrid_detail',
     getColumns: this.getSubDetailGridColumns, // 获取columns配置的接口，传进去在FilterSetModel构造器中调用，调用时会把FilterSetModel的实例传进来当参数
     _class: '', // 设置Grid最外层div的class
     getDisplayRows: (rows) => { // 对rows的加工接口，返回的是最终展示出来的数据
@@ -999,6 +1004,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
   })
 
   getSubLogGrid = () => ({
+    gridIdForColumnConfig: 'omsSaleOrder_filterset_subGrid_log',
     getColumns: this.getSubLogGridColumns, // 获取columns配置的接口，传进去在FilterSetModel构造器中调用，调用时会把FilterSetModel的实例传进来当参数
     _class: '', // 设置Grid最外层div的class
     getDisplayRows: (rows) => { // 对rows的加工接口，返回的是最终展示出来的数据

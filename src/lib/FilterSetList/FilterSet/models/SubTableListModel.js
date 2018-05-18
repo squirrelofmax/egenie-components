@@ -80,12 +80,9 @@ var _initialiseProps = function _initialiseProps() {
   });
   this.setListModel = (0, _mobx.action)(function (list) {
     _this2.listModel = list.map(function (el) {
-      var _el$grid = el.grid,
-          getColumns = _el$grid.getColumns,
-          restOfGrid = (0, _objectWithoutProperties3.default)(_el$grid, ['getColumns']);
-
-      var grid = (0, _extends4.default)({ columns: getColumns(_this2.top) }, restOfGrid);
-      return new _SubTableModel2.default((0, _extends4.default)({}, el, { grid: grid, parent: _this2, top: _this2.top }));
+      // const { grid: { getColumns, ...restOfGrid } } = el
+      // const grid = { columns: getColumns(this.top), ...restOfGrid }
+      return new _SubTableModel2.default((0, _extends4.default)({}, el, { parent: _this2, top: _this2.top }));
     }, _this2);
   });
   this.resetWhenDeleteCursorRowOfMainGrid = (0, _mobx.action)(function (id) {
@@ -97,6 +94,7 @@ var _initialiseProps = function _initialiseProps() {
     if (id == null || id !== cursorRow[primaryKeyField]) return;
     console.log('执行resetWhenDeleteCursorRowOfMainGrid');
     _this2.top.gridModel.cursorRow = {};
+    _this2.top.gridModel.cursorIdx = '';
     _this2.listModel.forEach(function (el) {
       (0, _mobx.set)(el.gridModel, {
         rows: [], total: 0, currentPage: 1, selectedKeyValues: [], cashSelectedRows: [], expanded: {}, treeCash: {}

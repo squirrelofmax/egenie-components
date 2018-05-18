@@ -4,6 +4,10 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _defineProperty2 = require('babel-runtime/helpers/defineProperty');
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
 var _assign = require('babel-runtime/core-js/object/assign');
 
 var _assign2 = _interopRequireDefault(_assign);
@@ -146,9 +150,10 @@ var FilterSetModel = function FilterSetModel(_ref) {
           _gridModel = this.gridModel,
           cashOn = _gridModel.cashOn,
           cashSelectedRows = _gridModel.cashSelectedRows;
-      // 如果没有cashRows就不处理直接返回
+      // 如果没有cashRows就不处理直接返回,这种处理方式被废弃
 
-      if (!buttonsPassPermissionValidate.length || !cashOn || !cashSelectedRows || !cashSelectedRows.length) return buttonsPassPermissionValidate;
+      if (!buttonsPassPermissionValidate.length) return buttonsPassPermissionValidate;
+      if (!cashOn || !cashSelectedRows || !cashSelectedRows.length) cashSelectedRows = [];
       return buttonsPassPermissionValidate.map(function (button) {
         var group = button.group,
             firstButton = (0, _objectWithoutProperties3.default)(button, ['group']);
@@ -354,6 +359,7 @@ var _initialiseProps = function _initialiseProps() {
       }
       return;
     }
+    _this2.gridModel.resetCursorRow();
     _this2.gridModel.resetHeaderCheckBox(); // 重置表头的勾选框
     var data = _this2.searchData;
     /// /console.log(data, '点击搜索')
@@ -372,6 +378,8 @@ var _initialiseProps = function _initialiseProps() {
     _this2.gridModel.cashSelectedRows = [];
   });
   this.queryDataAndSetState = (0, _mobx.action)(function (data) {
+    var flagOfRefresh = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
     _this2.gridModel.loading = true;
     _this2.history = (0, _extends3.default)({}, data);
     _this2.api.queryData && _this2.api.queryData(data, _this2).then((0, _mobx.action)(function (v) {
@@ -381,10 +389,12 @@ var _initialiseProps = function _initialiseProps() {
       if (v.status !== 'Successful') {
         _this2.gridModel.rows = [];
         _this2.gridModel.total = 0;
+        _this2.gridModel.callbackAfterRefresh(flagOfRefresh);
         return _elementReact.Message.error(v.data);
       }
       _this2.gridModel.rows = v.data.list;
       _this2.gridModel.total = v.data.totalCount;
+      _this2.gridModel.callbackAfterRefresh(flagOfRefresh);
     }));
   });
   this.prevHandleDataFromInner = (0, _mobx.action)(function (innerState) {
@@ -398,13 +408,14 @@ var _initialiseProps = function _initialiseProps() {
     var data = _this2.prevHandleDataFromInner(innerState);
     _this2.queryDataAndSetState(data);
   });
-  this.onRefresh = (0, _mobx.action)(function () {
+  this.onRefresh = (0, _mobx.action)(function (flagKey) {
     var data = _this2.history;
-    _this2.queryDataAndSetState(data);
+    var flagObj = flagKey ? (0, _defineProperty3.default)({}, flagKey, true) : {};
+    _this2.queryDataAndSetState(data, flagObj);
   });
-  this.onSortAll = (0, _mobx.action)(function (_ref3) {
-    var sidx = _ref3.sidx,
-        sord = _ref3.sord;
+  this.onSortAll = (0, _mobx.action)(function (_ref4) {
+    var sidx = _ref4.sidx,
+        sord = _ref4.sord;
 
     var data = (0, _extends3.default)({}, _this2.history, { sidx: sidx, sord: sord });
     _this2.queryDataAndSetState(data);
@@ -437,7 +448,8 @@ var _initialiseProps = function _initialiseProps() {
         onSortAll: onSortAll, // 排序
         onRowClick: onRowClick, // 行点击
         onRefresh: onRefresh
-      }
+      },
+      parent: _this2
     }));
   });
   this.setFilteritemsModel = (0, _mobx.action)(function (filteritems) {

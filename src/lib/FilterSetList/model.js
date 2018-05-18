@@ -43,10 +43,13 @@ var FilterSetListModel = function FilterSetListModel() {
     console.log('执行tab点击事件，参数tab的值为：', tab);
     // 初始化要执行一遍查询
     if (!_this.tabsFlag.inited[tab.props.name]) _this.filterSetList.find(function (el) {
-      return el.name === _this.activeTabName;
+      return el.name === tab.props.name;
     }).handleSearch();
     _this.tabsFlag.inited = (0, _extends4.default)({}, _this.tabsFlag.inited, (0, _defineProperty3.default)({}, tab.props.name, true));
     _this.activeTabName = tab.props.name;
+    setTimeout(function () {
+      return window.dispatchEvent(new Event('resize'));
+    }, 0);
   });
   this.onAddNew = (0, _mobx.action)(function (data) {
     // this.configOfFilterItems = this.configOfFilterItems.concat([data])

@@ -28,13 +28,14 @@ const ButtonsOfSubTable = observer(({store, store: {
     {_buttons.map((el, index) => {
       const { group } = el
       return group
-        ? (<Dropdown key={index} style={{ marginRight: 10 }} onCommand={idx => group.find(el => String(el.idx) === idx).handleClick()} menu={(
+        ? (<Dropdown splitButton key={index} style={{ marginRight: 10 }} onCommand={idx => group.find(el => String(el.idx) === idx).handleClick()} menu={(
           <Dropdown.Menu>
             {group.map((item) => (<Dropdown.Item key={item.idx} disabled={item.disabled} style={{ fontSize: 12 }} command={item.idx + ''}>{el.icon ? <i className={el.icon} style={{ marginRight: 3 }} /> : null}{item.text}</Dropdown.Item>))}
           </Dropdown.Menu>
-        )}>
+        )} onClick={() => { }}>
           <Button type='plain' size='small' onClick={el.handleClick.bind(store)} key={index} disabled={el.disabled} >
-            {el.icon ? <i className={el.icon} style={{ marginRight: 3, color: '#20A0FF' }} /> : null}{el.text}<i className='el-icon-caret-bottom el-icon--right' />
+            {el.icon ? <i className={el.icon} style={{ marginRight: 3, color: '#20A0FF' }} /> : null}{el.text}
+            {/* <i className='el-icon-caret-bottom el-icon--right' /> */}
           </Button>
         </Dropdown>)
         : (
@@ -116,13 +117,14 @@ const ButtonHeader = observer(({store, store: {
     {_buttons.map((el, index) => {
       const {group} = el
       return group
-        ? (<Dropdown key={index} style={{marginRight: 10}} onCommand={idx => group.find(el => String(el.idx) === idx).handleClick()} menu={(
+        ? (<Dropdown type='plain' size='small' splitButton key={index} style={{marginRight: 10}} onCommand={idx => group.find(el => String(el.idx) === idx).handleClick()} menu={(
           <Dropdown.Menu>
             {group.map((item) => (<Dropdown.Item key={item.idx} disabled={item.disabled} style={{ fontSize: 12 }} command={item.idx + ''}>{el.icon ? <i className={el.icon} style={{ marginRight: 3 }} /> : null}{item.text}</Dropdown.Item>))}
           </Dropdown.Menu>
-        )}>
+        )} onClick={() => {}}>
           <Button type='plain' size='small' onClick={el.handleClick.bind(store)} key={index} disabled={el.disabled} >
-            {el.icon ? <i className={el.icon} style={{ marginRight: 3, color: '#20A0FF' }} /> : null}{el.text}<i className='el-icon-caret-bottom el-icon--right' />
+            {el.icon ? <i className={el.icon} style={{ marginRight: 3, color: '#20A0FF' }} /> : null}{el.text}
+            {/* <i className='el-icon-caret-bottom el-icon--right' /> */}
           </Button>
         </Dropdown>)
         : (
@@ -144,13 +146,14 @@ const ButtonHeaderOfReport = observer(({ store, store: {
         {_buttons.map((el, index) => {
           const { group } = el
           return group
-              ? (<Dropdown key={index} style={{ marginRight: 10 }} onCommand={idx => group.find(el => String(el.idx) === idx).handleClick()} menu={(
+              ? (<Dropdown splitButton key={index} style={{ marginRight: 10 }} onCommand={idx => group.find(el => String(el.idx) === idx).handleClick()} menu={(
                 <Dropdown.Menu>
                   {group.map((item) => (<Dropdown.Item key={item.idx} disabled={item.disabled} style={{ fontSize: 12 }} command={item.idx + ''}>{el.icon ? <i className={el.icon} style={{ marginRight: 3 }} /> : null}{item.text}</Dropdown.Item>))}
                 </Dropdown.Menu>
-              )}>
-                <Button type='plain' size='small' onClick={el.handleClick.bind(store)} key={index} disabled={el.disabled} >
-                  {el.icon ? <i className={el.icon} style={{ marginRight: 3, color: '#20A0FF' }} /> : null}{el.text}<i className='el-icon-caret-bottom el-icon--right' />
+              )} onClick={() => {}}>
+                <Button type='plain' size='small' key={index} disabled={el.disabled} >
+                  {el.icon ? <i className={el.icon} style={{ marginRight: 3, color: '#20A0FF' }} /> : null}{el.text}
+                  {/* <i className='el-icon-caret-bottom el-icon--right' /> */}
                 </Button>
               </Dropdown>)
               : (

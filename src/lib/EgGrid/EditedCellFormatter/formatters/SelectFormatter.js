@@ -47,7 +47,7 @@ var SelectFormatter = (0, _mobxReact.observer)(function (_ref) {
         var label = _ref2.label,
             value = _ref2.value;
 
-        return _react2.default.createElement(_elementReact.Select.Option, { label: label, value: String(value), key: label });
+        return _react2.default.createElement(_elementReact.Select.Option, { label: label, value: String(value), key: label + ',' + value });
       }) : _react2.default.createElement('span', null)
     )
   );
@@ -59,5 +59,5 @@ function getLabelByValue(value, options) {
   var item = options.find(function (el) {
     return String(el.value) === String(value);
   });
-  return item ? item.label : '';
+  return item ? item.label : value;
 }

@@ -72,7 +72,7 @@ var ButtonsOfSubTable = (0, _mobxReact.observer)(function (_ref) {
 
       return group ? _react2.default.createElement(
         _elementReact.Dropdown,
-        { key: index, style: { marginRight: 10 }, onCommand: function onCommand(idx) {
+        { splitButton: true, key: index, style: { marginRight: 10 }, onCommand: function onCommand(idx) {
             return group.find(function (el) {
               return String(el.idx) === idx;
             }).handleClick();
@@ -87,13 +87,12 @@ var ButtonsOfSubTable = (0, _mobxReact.observer)(function (_ref) {
                 item.text
               );
             })
-          ) },
+          ), onClick: function onClick() {} },
         _react2.default.createElement(
           _elementReact.Button,
           { type: 'plain', size: 'small', onClick: el.handleClick.bind(store), key: index, disabled: el.disabled },
           el.icon ? _react2.default.createElement('i', { className: el.icon, style: { marginRight: 3, color: '#20A0FF' } }) : null,
-          el.text,
-          _react2.default.createElement('i', { className: 'el-icon-caret-bottom el-icon--right' })
+          el.text
         )
       ) : _react2.default.createElement(
         _elementReact.Button,
@@ -230,7 +229,7 @@ var ButtonHeader = (0, _mobxReact.observer)(function (_ref4) {
 
       return group ? _react2.default.createElement(
         _elementReact.Dropdown,
-        { key: index, style: { marginRight: 10 }, onCommand: function onCommand(idx) {
+        { type: 'plain', size: 'small', splitButton: true, key: index, style: { marginRight: 10 }, onCommand: function onCommand(idx) {
             return group.find(function (el) {
               return String(el.idx) === idx;
             }).handleClick();
@@ -245,13 +244,12 @@ var ButtonHeader = (0, _mobxReact.observer)(function (_ref4) {
                 item.text
               );
             })
-          ) },
+          ), onClick: function onClick() {} },
         _react2.default.createElement(
           _elementReact.Button,
           { type: 'plain', size: 'small', onClick: el.handleClick.bind(store), key: index, disabled: el.disabled },
           el.icon ? _react2.default.createElement('i', { className: el.icon, style: { marginRight: 3, color: '#20A0FF' } }) : null,
-          el.text,
-          _react2.default.createElement('i', { className: 'el-icon-caret-bottom el-icon--right' })
+          el.text
         )
       ) : _react2.default.createElement(
         _elementReact.Button,
@@ -284,7 +282,7 @@ var ButtonHeaderOfReport = (0, _mobxReact.observer)(function (_ref5) {
 
         return group ? _react2.default.createElement(
           _elementReact.Dropdown,
-          { key: index, style: { marginRight: 10 }, onCommand: function onCommand(idx) {
+          { splitButton: true, key: index, style: { marginRight: 10 }, onCommand: function onCommand(idx) {
               return group.find(function (el) {
                 return String(el.idx) === idx;
               }).handleClick();
@@ -299,13 +297,12 @@ var ButtonHeaderOfReport = (0, _mobxReact.observer)(function (_ref5) {
                   item.text
                 );
               })
-            ) },
+            ), onClick: function onClick() {} },
           _react2.default.createElement(
             _elementReact.Button,
-            { type: 'plain', size: 'small', onClick: el.handleClick.bind(store), key: index, disabled: el.disabled },
+            { type: 'plain', size: 'small', key: index, disabled: el.disabled },
             el.icon ? _react2.default.createElement('i', { className: el.icon, style: { marginRight: 3, color: '#20A0FF' } }) : null,
-            el.text,
-            _react2.default.createElement('i', { className: 'el-icon-caret-bottom el-icon--right' })
+            el.text
           )
         ) : _react2.default.createElement(
           _elementReact.Button,

@@ -1,9 +1,10 @@
 import React from 'react'
 import ReactDataGrid from 'react-data-grid'
-import { extendObservable, action, intercept, observable, set} from 'mobx'
+import { extendObservable, action, intercept, observable, set, autorun} from 'mobx'
 import { getMapOfFieldToEditedCellModel } from './EditedCellFormatter'
 import { observer } from 'mobx-react'
 import shortid from 'shortid'
+import { getUser, getColumnsConfig, saveColumnsConfig, cache } from './requests'
 // model
 
 /*
@@ -12,12 +13,14 @@ api:{
 }
 */
 export default class EgGridModel {
-  constructor ({ columns, interceptorOfRows, getDisplayRows, api = {}, parent = {}, ...options }) {
+  constructor ({ columns, interceptorOfRows, user = getUser, getDisplayRows, api = {}, parent = {}, ...options }) {
     this.api = api
     this.setRowRender()
     extendObservable(this, {
       parent,
       id: shortid.generate(),
+      cache,
+      user: '',
       _class: '', // 特殊样式的类
       columns: this.prevHandleColumns(columns),
       rows: [],
@@ -40,11 +43,14 @@ export default class EgGridModel {
       hiddenRefresh: false, // 是否隐藏刷新按钮
       hiddenReset: false, // 是否隐藏重置按钮
       hiddenPager: false, // 是否隐藏分页器
+      gridIdForColumnConfig: '',
       // 非state中的属性
       sumColumns: [],
       refreshWhenRowsSelectChange: false, // 貌似跟表格没关系，就算有关系，用mobx也可以省略之
       cashOn: false,
       sortAll: false,
+      cacheColumnConfig: true,
+      // ignoreCacheChange: true,
       wrapperRef: {},
       get _size () {
         return this.size ? Number(this.size) : 0
@@ -55,17 +61,23 @@ export default class EgGridModel {
       get _rows () { // getDisplayRows是rows的转换规则，prevHandleRows是内置的预处理规则，主要用于转换树结构
         const {rows} = this
         if (!getDisplayRows) return this.prevHandleRows(rows)
-        return getDisplayRows(this.prevHandleRows(rows), rows)// 传源rows的目的是在产生可编辑单元格的model时可以直接操作当前行
+        const ret = getDisplayRows(this.prevHandleRows(rows), rows)
+        return ret// 传源rows的目的是在产生可编辑单元格的model时可以直接操作当前行
       },
       get rowsCount () {
         return this._rows.length
       },
+      get _columns () {
+        const ret = this.columns.filter(el => !el.ejlHidden)
+        ret.sort((a, b) => {
+          return a.ejlIndex - b.ejlIndex
+        })
+        return ret
+      },
+      get cacheKeyForColumnsConfig () {
+        return this.user + '__' + this.gridIdForColumnConfig
+      },
       ...(options || {})
-    })
-
-    intercept(this, 'columns', (change) => {
-      change.newValue = this.prevHandleColumns(change.newValue)
-      return change
     })
 
     interceptorOfRows = typeof interceptorOfRows === 'function' ? interceptorOfRows(this) : interceptorOfRows
@@ -74,6 +86,10 @@ export default class EgGridModel {
         change.newValue = this.getMapOfFieldToEditedCellModel(change.newValue, interceptorOfRows)
         return change
       })
+    }
+    if (this.cacheColumnConfig) {
+      this.getUser(user)
+      autorun(this.updateColumnsWhenCacheChange)
     }
   }
   // 工具方法
@@ -101,18 +117,20 @@ export default class EgGridModel {
 
   prevHandleColumns = (columns = []) => {
     if (!columns.length) return columns
-    if (columns[0].key === 'gridOrderNo') return columns
-    return [
+    columns = columns[0].key === 'gridOrderNo' ? columns : [
       {
         key: 'gridOrderNo',
         width: 50,
         name: '序号',
         locked: true,
-        formatter: ({value}) => (<div style={{marginLeft: -8, textAlign: 'center'}}>{value}</div>),
+        formatter: ({ value }) => (<div style={{ marginLeft: -8, textAlign: 'center' }}>{value}</div>),
         getRowMetaData: row => row
       },
       ...columns
     ]
+    return columns.map((el, index) => {
+      return { ejlHidden: false, ...el, ejlOriginalIndex: index, ejlIndex: index }
+    })
   }
   rowGetter = (i) => {
     return this._rows[i]
@@ -179,18 +197,42 @@ export default class EgGridModel {
     }
   })
   handleHeaderDrop = action((source, target) => {
-    // console.log(source, target, '--source, target--列拖拽')
-    const columnSourceIndex = this.columns.findIndex(i => i.key === source)
-    const columnTargetIndex = this.columns.findIndex(i => i.key === target)
-    const copy = this.columns.slice(0)
-    copy.splice(columnTargetIndex, 0, copy.splice(columnSourceIndex, 1)[0])
-    //  要先清空columns 再赋值
+    if (source === target) return
+    let copy = this.columns.slice(0)
+    copy.sort((a, b) => {
+      return a.ejlIndex - b.ejlIndex
+    })
+    const columnSourceIndex = copy.findIndex(i => i.key === source)
+    const columnTargetIndex = copy.findIndex(i => i.key === target)
+    copy[columnSourceIndex].ejlIndex = columnTargetIndex
+    const indexChangeDirection = columnSourceIndex < columnTargetIndex ? -1 : 1
+    const params = columnSourceIndex < columnTargetIndex ? [columnSourceIndex + 1, columnTargetIndex + 1] : [columnTargetIndex, columnSourceIndex]
+    copy.slice(...params).forEach(el => {
+      el.ejlIndex += indexChangeDirection
+    })
+    copy = this.columns.slice(0)// 只改ejlIndex，不更改数组顺序
+    //  要先清空columns 再赋值，必须！涉及到了DraggableHeader组件
     this.columns = []
-    setTimeout(() => { this.columns = copy }, 0)
+    setTimeout(action(() => (this.columns = copy)), 0)
+    // 保存columnsConfig到后端以及localStorage
+    if (!this.cacheColumnConfig) return
+    let configObj = copy.reduce((res, column) => {
+      const { ejlIndex, ejlOriginalIndex } = column
+      if (ejlOriginalIndex !== ejlIndex) res[ejlOriginalIndex] = ejlIndex
+      return res
+    }, {})
+    this.saveColumnsConfig(configObj)
+  })
+
+  saveColumnsConfig = action((config) => {
+    const data = {
+      cacheKey: this.cacheKeyForColumnsConfig,
+      cacheValue: JSON.stringify(config)
+    }
+    saveColumnsConfig(data)
   })
   /* 排序相关 */
   handleGridSort = action((sortColumn, sortDirection) => {
-    // console.log(sortColumn, sortDirection, '--sortColumn, sortDirection--执行列排序')
     if (sortDirection === 'ASC') {
       this.defaultRows = this._rows.slice(0)
     }
@@ -223,14 +265,12 @@ export default class EgGridModel {
     // setTimeout(() => { this.comp.forceUpdate() })// 树结构按钮都归位,TODO,需要强制刷新？如果需要，只能找Grid的Ref了
   })
   handleGridSortAll = action((sortColumn, sortDirection) => {
-    // console.log(sortColumn, sortDirection, '--sortColumn, sortDirection--执行列排序')
     const param = sortDirection === 'NONE' ? {} : { sidx: sortColumn, sord: sortDirection.toLowerCase() }
     this.api.onSortAll && this.api.onSortAll(param)
   })
   /* 树结构相关方法 */
   getSubRowDetails = action((rowItem) => {
     if (this.treeField) {
-      // console.log('执行getSubRowDetails方法') // 随滚动条实时刷新
       const rowKeyValue = rowItem[this.primaryKeyField]
       let isExpanded = !!this.expanded[rowKeyValue]
       return { // 该节点的信息+其children，后者用假数据，只为了保证展开按钮存在。信息貌似也没啥用处----Grid组件内部用
@@ -255,7 +295,6 @@ export default class EgGridModel {
         expanded[rowKeyValue] = false
         rows.splice(rowIndex + 1, subRows.length)
       }
-      // console.log(this, rows, '第一次Expand的最后一步')
     }
 
     const defaultSubRows = [{}]
@@ -321,6 +360,7 @@ export default class EgGridModel {
     })
   })
   onRowClick = action((rowIdx, row) => {
+    // console.log('EgGrid内部的onRowClick')
     if (~rowIdx) {
       this.beforeIdx = this.cursorIdx
       this.cursorIdx = rowIdx
@@ -396,4 +436,97 @@ export default class EgGridModel {
       return this.gridModel.resetCursorRow()
     }
   })
+
+  getUser = action((user) => {
+    if (typeof user === 'function') {
+      return Promise.resolve(user()).then(action(v => {
+        if (!v) return
+        this.user = v.username
+      })).then(this.getColumnsConfig)
+    }
+    Promise.resolve(user).then(action(v => {
+      this.user = v
+    })).then(this.getColumnsConfig)
+  })
+
+  getColumnsConfig = action(() => { // 只会在页面初始化的时候调用
+    getColumnsConfig(this.cacheKeyForColumnsConfig).then(action(v => {
+      if (v.status !== 'Successful') return
+      // this.ignoreCacheChange = true
+      cache.setStorage({ cacheKey: this.cacheKeyForColumnsConfig, cacheValue: v.data || '{}' })
+      if (!v.data) return
+      // this.updateColumnsWhenCacheChange()
+      this.updateColumns(v.data)
+      const copy = this.columns.slice(0)
+      this.columns = []
+      setTimeout(action(() => { this.columns = copy }), 0)
+    }))
+  })
+
+  updateColumnsWhenCacheChange = () => {
+    // if (this.ignoreCacheChange) return (this.ignoreCacheChange = false)
+    const columnsConfig = cache.value[this.cacheKeyForColumnsConfig]
+    if (!columnsConfig) return
+    this.updateColumns(columnsConfig)
+  }
+
+  updateColumns = (columnsConfig) => {
+    if (!this.columns.length) return
+    this.columns.forEach(el => {
+      el.ejlIndex = el.ejlOriginalIndex
+    })
+    let params = {}
+    params = this.parseJSON(columnsConfig)
+    Object.entries(params).forEach(([key, value]) => {
+      this.columns[key].ejlIndex = value
+    })
+  }
+
+  parseJSON (str) {
+    let ret
+    try {
+      ret = JSON.parse(str)
+    } catch (e) {
+      let temp, i, j, kv
+      if (str.startsWith('[')) {
+        try {
+          str = str.slice(2, str.length - 2).split('},{')
+          temp = []
+          for (let i = 0, len = str.length; i < len; i++) {
+            var item = str[i].split(','),
+              obj = {}
+            for (j = 0; j < item.length; j++) {
+              kv = item[j].split(':')
+              obj[kv[0]] = kv[1]
+            }
+            temp.push(obj)
+          }
+          ret = temp
+        } catch (e) {
+          ret = null
+          console.warn('parseJSON 失败', str)
+        }
+      } else {
+        try {
+          str = str.slice(1, str.length - 1).split(',')
+          temp = {}
+          for (i = 0; i < str.length; i++) {
+            kv = str[i].split(':')
+            temp[kv[0]] = kv[1]
+          }
+          ret = temp
+        } catch (e) {
+          ret = null
+          console.warn('parseJSON 失败', str)
+        }
+      }
+    }
+    for (let key in ret) {
+      try {
+        ret[key] = JSON.parse(ret[key])
+      } catch (e) {
+      }
+    }
+    return ret
+  }
 }

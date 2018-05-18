@@ -106,7 +106,7 @@ var Pager = (0, _mobxReact.observer)(function (_ref3) {
       showCheckBox = _ref3$store.showCheckBox,
       sumColumns = _ref3$store.sumColumns,
       rows = _ref3$store.rows,
-      columns = _ref3$store.columns,
+      _columns = _ref3$store._columns,
       onRefresh = _ref3$store.onRefresh;
 
   return hiddenPager && hiddenRefresh && (hiddenReset || !showCheckBox) && !(sumColumns && sumColumns.length) ? null : _react2.default.createElement(
@@ -144,14 +144,15 @@ var Pager = (0, _mobxReact.observer)(function (_ref3) {
       sumColumns && sumColumns.length ? sumColumns.reduce(function (res, columnKey) {
         var item = void 0;
         if ((typeof columnKey === 'undefined' ? 'undefined' : (0, _typeof3.default)(columnKey)) === 'object') {
-          item = columns.find(function (el) {
+          item = _columns.find(function (el) {
             return el.key === columnKey.key;
           });
         } else {
-          item = columns.find(function (el) {
+          item = _columns.find(function (el) {
             return el.key === columnKey;
           });
         }
+        if (!item) return res;
         var label = _react2.default.createElement(
           'label',
           { key: item ? item.name : '', style: { marginTop: 2, marginLeft: 10, marginRight: 5 } },
@@ -178,6 +179,7 @@ var EgGrid = (0, _mobxReact.observer)(function (props) {
   var _props$store = props.store,
       _class = _props$store._class,
       columns = _props$store.columns,
+      _columns = _props$store._columns,
       selectedKeyValues = _props$store.selectedKeyValues,
       primaryKeyField = _props$store.primaryKeyField,
       loading = _props$store.loading,
@@ -207,7 +209,7 @@ var EgGrid = (0, _mobxReact.observer)(function (props) {
       _react2.default.createElement(
         _reactDataGridAddons.DraggableHeader.DraggableContainer,
         { key: '1', onHeaderDrop: handleHeaderDrop },
-        _react2.default.createElement(_reactDataGrid2.default, { columns: columns.slice(0), rowGetter: rowGetter, rowsCount: rowsCount, onGridSort: sortAll ? handleGridSortAll : handleGridSort,
+        _react2.default.createElement(_reactDataGrid2.default, { columns: _columns.slice(0), rowGetter: rowGetter, rowsCount: rowsCount, onGridSort: sortAll ? handleGridSortAll : handleGridSort,
           getSubRowDetails: getSubRowDetails, onCellExpand: onCellExpand, rowSelection: {
             showCheckbox: !!showCheckBox,
             enableShiftSelect: true,

@@ -54,13 +54,14 @@ export default class FilterSetModel {
         }).filter(button => button)// 过滤掉false
       },
       get _buttons () { // 最终页面展示的buttons，跟cashRows联动
-        const {
+        let {
           buttonsPassPermissionValidate, gridModel: {
             cashOn, cashSelectedRows
           }
         } = this
-        // 如果没有cashRows就不处理直接返回
-        if (!buttonsPassPermissionValidate.length || !cashOn || !cashSelectedRows || !cashSelectedRows.length) return buttonsPassPermissionValidate
+        // 如果没有cashRows就不处理直接返回,这种处理方式被废弃
+        if (!buttonsPassPermissionValidate.length) return buttonsPassPermissionValidate
+        if (!cashOn || !cashSelectedRows || !cashSelectedRows.length) cashSelectedRows = []
         return buttonsPassPermissionValidate.map(button => {
           let { group, ...firstButton } = button
           const {display} = button

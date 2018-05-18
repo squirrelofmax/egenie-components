@@ -57,9 +57,6 @@ export default class OrderDetailModel {
     autorun(() => {
       this.gridModel.total = this.gridModel.rows.length
     })
-    autorun(() => {
-      this.gridModel.columns = this.getColumns()
-    })
     this.onFilter()
   }
 
@@ -257,6 +254,7 @@ export default class OrderDetailModel {
         ],
         context: this
       },
+      gridIdForColumnConfig: 'omsSaleOrder_filterset_editDialog_grid',
       primaryKeyField: 'skuId',
       getDisplayRows: (rows, rawRows) => {
         const {_filteritems, getFilter} = this

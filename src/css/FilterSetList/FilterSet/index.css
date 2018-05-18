@@ -392,3 +392,15 @@
   padding:0 9px;
   height:22px;
 }
+.el-dropdown>.el-button-group{
+  display:flex;
+}
+.el-dropdown>.el-button-group>.el-button{
+  padding:0;
+}
+.el-dropdown>.el-button-group>.el-button:first-of-type{
+  border-width:0;
+}
+.el-dropdown>.el-button-group>.el-button:last-of-type{
+  padding-top:2px;
+}

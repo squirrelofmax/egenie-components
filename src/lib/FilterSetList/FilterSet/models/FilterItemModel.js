@@ -73,11 +73,9 @@ var FilterItemModel = function () {
 
           return !min && !max ? '' : min + ',' + max;
         }
-        if (label === '省' || label === '市' || label === '区县') {
-          var item = options && options.find(function (ssq) {
-            return ssq[valueField] === value;
-          });
-          return (item ? item[labelField] : '') + '';
+        if (type === 'tree') {
+          if (!value || !value.length) return '';
+          return value[value.length - 1] + '';
         }
         return value + '';
       }
@@ -142,6 +140,10 @@ var _initialiseProps = function _initialiseProps() {
     _this.handleValueChange(value);
   });
   this.handleSelectChange = (0, _mobx.action)(function (value) {
+    _this.handleValueChange(value);
+  });
+  this.handleTreeChange = (0, _mobx.action)(function (value) {
+    console.log('执行handleTreeChange，Value：', value);
     _this.handleValueChange(value);
   });
   this.handleNumberGroupChange = (0, _mobx.action)(function (key, v) {

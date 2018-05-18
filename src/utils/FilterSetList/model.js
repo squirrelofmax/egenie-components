@@ -41,9 +41,10 @@ export default class FilterSetListModel {
   onTabsClick = action((tab) => {
     console.log('执行tab点击事件，参数tab的值为：', tab)
     // 初始化要执行一遍查询
-    if (!this.tabsFlag.inited[tab.props.name]) this.filterSetList.find(el => el.name === this.activeTabName).handleSearch()
+    if (!this.tabsFlag.inited[tab.props.name]) this.filterSetList.find(el => el.name === tab.props.name).handleSearch()
     this.tabsFlag.inited = { ...this.tabsFlag.inited, [tab.props.name]: true }
     this.activeTabName = tab.props.name
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 0)
   })
   // FilterSet生成方案后回调
   onAddNew = action((data) => {

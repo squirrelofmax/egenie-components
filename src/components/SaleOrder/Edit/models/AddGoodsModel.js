@@ -205,6 +205,7 @@ export default class AddGoodsModel {
           return { ...el, onlyId: el.sku_id }
         })
       },
+      gridIdForColumnConfig: 'omsSaleOrder_filterset_editDialog_addgoods_topGrid',
       primaryKeyField: 'skuId',
       cashOn: true,
       sortAll: false,
@@ -227,6 +228,7 @@ export default class AddGoodsModel {
         ],
         context: this
       },
+      gridIdForColumnConfig: 'omsSaleOrder_filterset_editDialog_addgoods_bottomGrid',
       getDisplayRows (rows) {
         return rows.map((el, index) => {
           return { ...el, onlyId: el.sku_id }

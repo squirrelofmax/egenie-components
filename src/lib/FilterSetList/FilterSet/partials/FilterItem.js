@@ -4,9 +4,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _promise = require('babel-runtime/core-js/promise');
+
+var _promise2 = _interopRequireDefault(_promise);
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _mobx = require('mobx');
 
 var _mobxReact = require('mobx-react');
 
@@ -30,6 +36,7 @@ var FilterItem = (0, _mobxReact.observer)(function (_ref) {
       valueField = _ref$store.valueField,
       _ref$store$display = _ref$store.display,
       display = _ref$store$display === undefined ? true : _ref$store$display,
+      treeProps = _ref$store.treeProps,
       handleNumberGroupChange = _ref$store.handleNumberGroupChange,
       handleTextChange = _ref$store.handleTextChange,
       handleDateChange = _ref$store.handleDateChange,
@@ -37,7 +44,8 @@ var FilterItem = (0, _mobxReact.observer)(function (_ref) {
       onKeyUp = _ref$store.onKeyUp,
       clearable = _ref$store.clearable,
       disabledDate = _ref$store.disabledDate,
-      handleYearChange = _ref$store.handleYearChange;
+      handleYearChange = _ref$store.handleYearChange,
+      handleTreeChange = _ref$store.handleTreeChange;
 
   var defaultLabel = _react2.default.createElement(
     'label',
@@ -133,6 +141,18 @@ var FilterItem = (0, _mobxReact.observer)(function (_ref) {
           return _react2.default.createElement(_elementReact.Select.Option, { label: el[labelField], value: el[valueField], key: el[valueField] });
         }) : ''
       )
+    );
+  }
+
+  if (type === 'tree') {
+    return _react2.default.createElement(
+      'div',
+      { className: defaultWrapperClassName, style: style },
+      defaultLabel,
+      _react2.default.createElement(_elementReact.Cascader, { className: value && value.length ? 'has-value' : '', value: (value || []).slice(0), onChange: handleTreeChange, options: (0, _mobx.toJS)(options), props: treeProps, filterable: true, clearable: true, changeOnSelect: true, showAllLevels: false,
+        beforeFilter: function beforeFilter() {
+          return _promise2.default.resolve(true);
+        } })
     );
   }
 });
