@@ -9,6 +9,7 @@ import EgGridModel from './EgGrid/EgGridModel'
 import ImgFormatter from './EgGrid/ImgFormatter'
 import TimeStampFormatter from './EgGrid/TimeStampFormatter'
 import { getEditableCellFormatter } from './EgGrid/EditedCellFormatter'
+import '../css/common.css'
 
 export {
 egFetch,

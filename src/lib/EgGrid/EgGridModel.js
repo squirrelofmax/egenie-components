@@ -24,10 +24,6 @@ var _stringify = require('babel-runtime/core-js/json/stringify');
 
 var _stringify2 = _interopRequireDefault(_stringify);
 
-var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
-
-var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
-
 var _getPrototypeOf = require('babel-runtime/core-js/object/get-prototype-of');
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
@@ -39,6 +35,10 @@ var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorRet
 var _inherits2 = require('babel-runtime/helpers/inherits');
 
 var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _toConsumableArray2 = require('babel-runtime/helpers/toConsumableArray');
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
 var _extends2 = require('babel-runtime/helpers/extends');
 
@@ -94,11 +94,12 @@ var EgGridModel = function () {
         _ref$user = _ref.user,
         user = _ref$user === undefined ? _requests.getUser : _ref$user,
         getDisplayRows = _ref.getDisplayRows,
+        getDisplayColumns = _ref.getDisplayColumns,
         _ref$api = _ref.api,
         api = _ref$api === undefined ? {} : _ref$api,
         _ref$parent = _ref.parent,
         parent = _ref$parent === undefined ? {} : _ref$parent,
-        options = (0, _objectWithoutProperties3.default)(_ref, ['columns', 'interceptorOfRows', 'user', 'getDisplayRows', 'api', 'parent']);
+        options = (0, _objectWithoutProperties3.default)(_ref, ['columns', 'interceptorOfRows', 'user', 'getDisplayRows', 'getDisplayColumns', 'api', 'parent']);
     (0, _classCallCheck3.default)(this, EgGridModel);
 
     _initialiseProps.call(this);
@@ -159,12 +160,34 @@ var EgGridModel = function () {
         return this._rows.length;
       },
       get _columns() {
-        var ret = this.columns.filter(function (el) {
+        var ret = [{
+          key: 'gridOrderNo',
+          width: 50,
+          name: '序号',
+          locked: true,
+          ejlHidden: false,
+          ejlOriginalIndex: 0,
+          ejlIndex: 0,
+          formatter: function formatter(_ref2) {
+            var value = _ref2.value;
+            return _react2.default.createElement(
+              'div',
+              { style: { marginLeft: -8, textAlign: 'center' } },
+              value
+            );
+          },
+          getRowMetaData: function getRowMetaData(row) {
+            return row;
+          }
+        }].concat((0, _toConsumableArray3.default)(this.columns)).filter(function (el) {
           return !el.ejlHidden;
         });
-        ret.sort(function (a, b) {
-          return a.ejlIndex - b.ejlIndex;
-        });
+        if (this.cacheColumnConfig) {
+          ret.sort(function (a, b) {
+            return a.ejlIndex - b.ejlIndex;
+          });
+        }
+        if (getDisplayColumns) ret = getDisplayColumns(ret, this);
         return ret;
       },
       get cacheKeyForColumnsConfig() {
@@ -261,9 +284,9 @@ var EgGridModel = function () {
      * utils
      */
 
-    value: function getMapOfFieldToEditedCellModel(sourceRows, _ref2) {
-      var config = _ref2.config,
-          context = _ref2.context;
+    value: function getMapOfFieldToEditedCellModel(sourceRows, _ref3) {
+      var config = _ref3.config,
+          context = _ref3.context;
 
       return (0, _mobx.observable)((sourceRows || []).map(function (el, idx) {
         if (el.hasOwnProperty('mapOfFieldToEditedCellModel')) return el;
@@ -360,25 +383,8 @@ var _initialiseProps = function _initialiseProps() {
     var columns = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
     if (!columns.length) return columns;
-    columns = columns[0].key === 'gridOrderNo' ? columns : [{
-      key: 'gridOrderNo',
-      width: 50,
-      name: '序号',
-      locked: true,
-      formatter: function formatter(_ref3) {
-        var value = _ref3.value;
-        return _react2.default.createElement(
-          'div',
-          { style: { marginLeft: -8, textAlign: 'center' } },
-          value
-        );
-      },
-      getRowMetaData: function getRowMetaData(row) {
-        return row;
-      }
-    }].concat((0, _toConsumableArray3.default)(columns));
     return columns.map(function (el, index) {
-      return (0, _extends3.default)({ ejlHidden: false }, el, { ejlOriginalIndex: index, ejlIndex: index });
+      return (0, _extends3.default)({ ejlHidden: false }, el, { ejlOriginalIndex: index + 1, ejlIndex: index + 1 });
     });
   };
 

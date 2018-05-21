@@ -13,7 +13,7 @@ api:{
 }
 */
 export default class EgGridModel {
-  constructor ({ columns, interceptorOfRows, user = getUser, getDisplayRows, api = {}, parent = {}, ...options }) {
+  constructor ({ columns, interceptorOfRows, user = getUser, getDisplayRows, getDisplayColumns, api = {}, parent = {}, ...options }) {
     this.api = api
     this.setRowRender()
     extendObservable(this, {
@@ -68,10 +68,26 @@ export default class EgGridModel {
         return this._rows.length
       },
       get _columns () {
-        const ret = this.columns.filter(el => !el.ejlHidden)
-        ret.sort((a, b) => {
-          return a.ejlIndex - b.ejlIndex
-        })
+        let ret = [
+          {
+            key: 'gridOrderNo',
+            width: 50,
+            name: '序号',
+            locked: true,
+            ejlHidden: false,
+            ejlOriginalIndex: 0,
+            ejlIndex: 0,
+            formatter: ({ value }) => (<div style={{ marginLeft: -8, textAlign: 'center' }}>{value}</div>),
+            getRowMetaData: row => row
+          },
+          ...this.columns
+        ].filter(el => !el.ejlHidden)
+        if (this.cacheColumnConfig) {
+          ret.sort((a, b) => {
+            return a.ejlIndex - b.ejlIndex
+          })
+        }
+        if (getDisplayColumns) ret = getDisplayColumns(ret, this)
         return ret
       },
       get cacheKeyForColumnsConfig () {
@@ -117,21 +133,11 @@ export default class EgGridModel {
 
   prevHandleColumns = (columns = []) => {
     if (!columns.length) return columns
-    columns = columns[0].key === 'gridOrderNo' ? columns : [
-      {
-        key: 'gridOrderNo',
-        width: 50,
-        name: '序号',
-        locked: true,
-        formatter: ({ value }) => (<div style={{ marginLeft: -8, textAlign: 'center' }}>{value}</div>),
-        getRowMetaData: row => row
-      },
-      ...columns
-    ]
     return columns.map((el, index) => {
-      return { ejlHidden: false, ...el, ejlOriginalIndex: index, ejlIndex: index }
+      return { ejlHidden: false, ...el, ejlOriginalIndex: index + 1, ejlIndex: index + 1 }
     })
   }
+
   rowGetter = (i) => {
     return this._rows[i]
   }

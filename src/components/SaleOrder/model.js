@@ -24,6 +24,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
   constructor (options) {
     super()
     extendObservable(this, {
+      flag: false,
       dict: {
         isChecked: [{ value: '0', label: '未审核' }, { value: '1', label: '已审核' }],
         confirmed_status: [],
@@ -249,6 +250,37 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
     gridIdForColumnConfig: 'omsSaleOrder_filterset_mainGrid',
     getColumns: this.getColumns, // 获取columns配置的接口，传进去在FilterSetModel构造器中调用，调用时会把FilterSetModel的实例传进来当参数
     _class: '', // 设置Grid最外层div的class
+    getDisplayColumns: (columns, gridModel) => {
+      if (!this.flag) return columns
+      const item = gridModel.parent.filteritems[5]
+      return [
+        {
+          key: 'test',
+          name: '测试',
+          width: 150,
+          resizable: true,
+          draggable: true,
+          sortable: true
+        },
+        {
+          key: item.label,
+          name: item.label,
+          width: 150,
+          resizable: true,
+          draggable: true,
+          sortable: true
+        },
+        {
+          key: item.label + '1',
+          name: item.value + '---',
+          width: 150,
+          resizable: true,
+          draggable: true,
+          sortable: true
+        },
+        ...columns
+      ]
+    },
     interceptorOfRows: this.getInterceptor(),
     getDisplayRows: (rows) => { // 对rows的加工接口，返回的是最终展示出来的数据，另外如果要加可编辑单元格要在此给每个row装配对应单元格的model
       return rows
@@ -759,6 +791,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
         text: '导出',
         icon: 'icon-export',
         handleClick: () => {
+          this.flag = !this.flag
           console.log('点击了导出按钮')
         },
         display: (rows) => rows.every(el => {

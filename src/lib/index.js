@@ -43,6 +43,8 @@ var _TimeStampFormatter2 = _interopRequireDefault(_TimeStampFormatter);
 
 var _EditedCellFormatter = require('./EgGrid/EditedCellFormatter');
 
+require('../css/common.css');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.egFetch = _egFetch2.default;
