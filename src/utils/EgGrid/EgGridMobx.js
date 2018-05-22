@@ -97,8 +97,7 @@ const EgGrid = observer((props) => {
     // console.log('EgGrid进行渲染render()',this.state.selectedKeyValues)
   const {
       _class,
-      columns,
-    _columns,
+      _columns,
       // rows,
       // size,
       // total,

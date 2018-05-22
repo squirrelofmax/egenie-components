@@ -16,7 +16,7 @@ startup
     - 无法兼容列拖拽保存功能，须cacheColumnConfig设为false
     - 可以通过getDisplayColumns属性动态生成列
     - 也可以直接操作gridModel，赋值新的columns
-    - 这种情况下，所有列都不支持排序，即sortable:true会造成bug
+    - 这种情况下，所有列都不支持排序，即draggable:true会造成bug
 - 需要给每个表格的配置项中加入gridIdForColumnConfig属性
 - 不缓存的表格加cacheColumnConfig，并赋值为false
 - buttons中的下拉选项现在在全禁用的情况下仍然能够看下拉选项。不过控制台会报button中套button的error，忽略即可。
@@ -24,3 +24,14 @@ startup
 - FilterSetList切换FilterSet的时候不触发查询的bug已修复
 - interceptor支持用方法包装起来，可以获取到对应的gridModel作为参数
 - 引入了common.css
+
+## V1.0.6
+
+列拖拽保存功能优化
+
+- 无法预测的动态列的保存方案
+    - 无法预测部分用getDisplayColumns来实现，动态生成的列draggable：false
+
+- 所以现在唯一不可以列拖拽保存的情况是，无法预测的动态列且生成的动态列要可拖拽
+    - 这种情况下首先cacheColumnConfig :false
+    - 然后，autorun()中生成动态列赋值给gridModel.columns。columns 的显示顺序保存在ejlIndex属性中，可根据ejlIndex调用sort()排序，赋值前需删除每一项的ejlIndex属性。

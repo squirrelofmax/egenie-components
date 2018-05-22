@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDataGrid from 'react-data-grid'
-import { extendObservable, action, intercept, observable, set, autorun} from 'mobx'
+import { extendObservable, action, intercept, observable, set, autorun } from 'mobx'
 import { getMapOfFieldToEditedCellModel } from './EditedCellFormatter'
 import { observer } from 'mobx-react'
 import shortid from 'shortid'
@@ -59,7 +59,7 @@ export default class EgGridModel {
         return this.currentPage ? Number(this.currentPage) : 0
       },
       get _rows () { // getDisplayRows是rows的转换规则，prevHandleRows是内置的预处理规则，主要用于转换树结构
-        const {rows} = this
+        const { rows } = this
         if (!getDisplayRows) return this.prevHandleRows(rows)
         const ret = getDisplayRows(this.prevHandleRows(rows), rows)
         return ret// 传源rows的目的是在产生可编辑单元格的model时可以直接操作当前行
@@ -75,18 +75,16 @@ export default class EgGridModel {
             name: '序号',
             locked: true,
             ejlHidden: false,
-            ejlOriginalIndex: 0,
-            ejlIndex: 0,
+            ejlOriginalIndex: -1,
+            ejlIndex: -1,
             formatter: ({ value }) => (<div style={{ marginLeft: -8, textAlign: 'center' }}>{value}</div>),
             getRowMetaData: row => row
           },
           ...this.columns
         ].filter(el => !el.ejlHidden)
-        if (this.cacheColumnConfig) {
-          ret.sort((a, b) => {
-            return a.ejlIndex - b.ejlIndex
-          })
-        }
+        ret.sort((a, b) => {
+          return a.ejlIndex - b.ejlIndex
+        })
         if (getDisplayColumns) ret = getDisplayColumns(ret, this)
         return ret
       },
@@ -94,6 +92,11 @@ export default class EgGridModel {
         return this.user + '__' + this.gridIdForColumnConfig
       },
       ...(options || {})
+    })
+
+    intercept(this, 'columns', (change) => {
+      change.newValue = this.prevHandleColumns(change.newValue)
+      return change
     })
 
     interceptorOfRows = typeof interceptorOfRows === 'function' ? interceptorOfRows(this) : interceptorOfRows
@@ -111,9 +114,9 @@ export default class EgGridModel {
   // 工具方法
   prevHandleRows = (rows) => {
     if (!rows || !rows.length) return []
-    const {size, currentPage} = this
+    const { size, currentPage } = this
     rows = rows.map((el, index) => {
-      el = {...el}
+      el = { ...el }
       el.gridOrderNo = (currentPage - 1) * size + index + 1
       return el
     })
@@ -134,7 +137,7 @@ export default class EgGridModel {
   prevHandleColumns = (columns = []) => {
     if (!columns.length) return columns
     return columns.map((el, index) => {
-      return { ejlHidden: false, ...el, ejlOriginalIndex: index + 1, ejlIndex: index + 1 }
+      return { ejlHidden: false, ejlOriginalIndex: index, ejlIndex: index, ...el }
     })
   }
 
@@ -418,7 +421,7 @@ export default class EgGridModel {
    * utils
    */
 
-  getMapOfFieldToEditedCellModel (sourceRows, {config, context}) {
+  getMapOfFieldToEditedCellModel (sourceRows, { config, context }) {
     return observable((sourceRows || []).map((el, idx) => {
       if (el.hasOwnProperty('mapOfFieldToEditedCellModel')) return el
       el = observable(el)
