@@ -1,6 +1,6 @@
 {
   "name": "egenie-components",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "private": false,
   "devDependencies": {},
   "dependencies": {
@@ -17,8 +17,7 @@
     "css-loader": "0.28.7",
     "dotenv": "4.0.0",
     "dotenv-expand": "4.2.0",
-    "egenie-components-test": "^1.0.0",
-    "element-react": "^1.4.8",
+    "element-react": "1.4.12",
     "element-theme-default": "^1.4.13",
     "eslint": "4.10.0",
     "eslint-config-react-app": "^2.1.0",

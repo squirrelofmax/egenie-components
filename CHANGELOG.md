@@ -35,3 +35,7 @@ startup
 - 所以现在唯一不可以列拖拽保存的情况是，无法预测的动态列且生成的动态列要可拖拽
     - 这种情况下首先cacheColumnConfig :false
     - 然后，autorun()中生成动态列赋值给gridModel.columns。columns 的显示顺序保存在ejlIndex属性中，可根据ejlIndex调用sort()排序，赋值前需删除每一项的ejlIndex属性。
+
+## V1.0.7
+
+bugfix ：element-react 临时固定在1.4.12 版本
