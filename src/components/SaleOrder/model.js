@@ -175,19 +175,19 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
     {
       field: 'pmsPurchaseOrderNo',
       type: 'text',
-      label: '客户'
+      label: '采购单号'
     },
     {
       field: 'tradeSaleOrderNo',
       type: 'text',
-      label: '客户',
+      label: '销售单号',
       labelField: 'label',
       valueField: 'value'
     },
     {
       field: 'salesType',
       type: 'select',
-      label: '销售方式销售方式',
+      label: '销售方式',
       labelField: 'label',
       valueField: 'value',
       options: []

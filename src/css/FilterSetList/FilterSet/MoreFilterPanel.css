@@ -29,7 +29,7 @@
   display:grid;
   flex-flow:row wrap;
   grid-template-columns:repeat(3,auto 1fr);
-  grid-column-gap:1px;
+  grid-column-gap:2px;
   grid-row-gap:5px;
   align-items: center;
 }

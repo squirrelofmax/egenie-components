@@ -1,20 +1,4 @@
-/* .filtergroup-wrapper{
-  display:flex;
-  align-items:center;
-  flex-flow:row wrap;
-  min-width:740px;
-  box-sizing:border-box;
-  flex:1 1 auto;
-}
-.filtergroup-wrapper>.filteritem-wrapper>.filteritem-label{
-  margin-left:2px;
-}
-.filtergroup-wrapper>.filteritem-wrapper:nth-of-type(5n - 4 )>.filteritem-label{
-  margin-left:0;
-}
-.filtergroup-wrapper>.filteritem-wrapper:nth-of-type(n + 6){
-  margin-top:5px;
-} */
+
 
 .filtergroup-wrapper{
   display:grid;
@@ -24,13 +8,11 @@
   flex:1 1 auto;
   grid-template-columns:repeat(5,auto 1fr);
   grid-template-rows:1fr 1fr;
-  grid-column-gap:1px;
+  grid-column-gap:2px;
   grid-row-gap:5px;
 }
 
 .filtergroup-wrapper .el-date-editor.el-input{
   width:100%;
 }
-.filtergroup-wrapper>.filteritem-label{
-  margin-left:2px;
-}
+
