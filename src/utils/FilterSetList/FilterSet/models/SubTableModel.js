@@ -241,4 +241,21 @@ export default class SubTableModel {
       })
     }
   }
+
+  // requestOry = (queryData) => {
+  //   let rejectOfLastRequest = []
+  //   let startIdx = 0
+  //   return (...args) => {
+  //     let i = rejectOfLastRequest.length + 1
+  //     return new Promise((resolve, reject) => {
+  //       rejectOfLastRequest.push(reject)
+  //       queryData.apply(this, args).then(v => {
+  //         resolve(v)
+  //         rejectOfLastRequest.slice(startIdx, i).forEach((r, idx) => r(`忽略对subTable的第${startIdx + 1}到第${i}次请求，本次是第${idx + 1}次`))
+  //         startIdx = i
+  //         rejectOfLastRequest = []
+  //       })
+  //     })
+  //   }
+  // }
 }

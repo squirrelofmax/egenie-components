@@ -24,10 +24,14 @@
 
 .morefilterpanel-wrapper .el-dialog__body{
   font-size:12px;
-  padding:15px 20px 0 10px;
+  padding:15px 10px;
   height:auto;
-  display:flex;
+  display:grid;
   flex-flow:row wrap;
+  grid-template-columns:repeat(3,auto 1fr);
+  grid-column-gap:1px;
+  grid-row-gap:5px;
+  align-items: center;
 }
 
 

@@ -1,4 +1,4 @@
-.filtergroup-wrapper{
+/* .filtergroup-wrapper{
   display:flex;
   align-items:center;
   flex-flow:row wrap;
@@ -14,4 +14,23 @@
 }
 .filtergroup-wrapper>.filteritem-wrapper:nth-of-type(n + 6){
   margin-top:5px;
+} */
+
+.filtergroup-wrapper{
+  display:grid;
+  align-items:center;
+  min-width:740px;
+  box-sizing:border-box;
+  flex:1 1 auto;
+  grid-template-columns:repeat(5,auto 1fr);
+  grid-template-rows:1fr 1fr;
+  grid-column-gap:1px;
+  grid-row-gap:5px;
+}
+
+.filtergroup-wrapper .el-date-editor.el-input{
+  width:100%;
+}
+.filtergroup-wrapper>.filteritem-label{
+  margin-left:2px;
 }

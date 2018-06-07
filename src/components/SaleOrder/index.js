@@ -5,7 +5,7 @@ import { observer } from 'mobx-react'
 // model
 import TopModel from './model'
 // 模块
-import {FilterSetList} from '@/lib'
+import {FilterSetList} from '@/utils'
 // 页面
 import Edit from './Edit'
 
