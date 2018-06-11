@@ -433,16 +433,16 @@ export default class EgGridModel {
   }
 
   callbackAfterRefresh = action(({ add, edit, remove }) => {
-    if (add) return this.gridModel.setCursorRowToFirst()
-    if (edit) return this.gridModel.triggerCursorRowClick()
+    if (add) return this.setCursorRowToFirst()
+    if (edit) return this.triggerCursorRowClick()
     if (remove) {
-      const { cashSelectedRows, selectedKeyValues, primaryKeyField, cursorRow } = this.gridModel
+      const { cashSelectedRows, selectedKeyValues, primaryKeyField, cursorRow } = this
       const id = cursorRow[primaryKeyField]
       const cashItem = cashSelectedRows.find(el => el[primaryKeyField] == id)
       cashItem && cashSelectedRows.remove(cashItem)
       const selectedId = selectedKeyValues.find(el => el == id)
       selectedId && selectedKeyValues.remove(selectedId)
-      return this.gridModel.resetCursorRow()
+      return this.resetCursorRow()
     }
   })
 

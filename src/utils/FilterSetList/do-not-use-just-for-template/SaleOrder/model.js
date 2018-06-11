@@ -174,7 +174,7 @@ export default class WrapperOfFilterSetListModel extends FilterSetListModel {
       label: '销售单号',
       labelField: 'label',
       valueField: 'value'
-    },    
+    },
     {
       field: 'pmsPurchaseOrderNo',
       type: 'text',
