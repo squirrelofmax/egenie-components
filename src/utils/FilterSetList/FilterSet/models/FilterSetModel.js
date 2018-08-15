@@ -149,7 +149,7 @@ export default class FilterSetModel {
             if (item.type === 'numbergroup') {
               (item.value.min || item.value.min === 0) && count++
               item.value.max && count++
-            } else {
+            } else if((item.type==='multiselect' && item.value.length) || item.type !== 'multiselect'){
               count++
             }
           }

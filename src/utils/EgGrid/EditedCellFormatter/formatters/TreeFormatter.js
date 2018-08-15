@@ -5,7 +5,7 @@ import {toJS} from 'mobx'
 import { observer } from 'mobx-react'
 
 const TreeFormatter = observer(({store, store: {
-  disabled, style, value, _class, clearable, treeOptions, treeProps,
+  disabled, style, value, _class, clearable, treeOptions, treeProps, changeOnSelect,
      handleCellBlur, handleCellValueChange
 }}) => {
   return (
@@ -14,7 +14,7 @@ const TreeFormatter = observer(({store, store: {
     }}>
       {disabled
         ? (value || []).join(',')
-        : <Cascader value={(value || []).slice(0)} options={toJS(treeOptions)} props={treeProps} filterable clearable={clearable} changeOnSelect
+        : <Cascader value={(value || []).slice(0)} options={toJS(treeOptions)} props={treeProps} filterable clearable={clearable} changeOnSelect={changeOnSelect}
           showAllLevels={false}
           beforeFilter={() => (Promise.resolve(true))}
           onKeyDown={(e) => { e.stopPropagation() }}

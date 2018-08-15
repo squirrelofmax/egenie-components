@@ -80,9 +80,10 @@ const FilterItem = observer(({
   }
 
   if (type === 'multiselect') {
+    let hasValue = value.length ? 'has-value' : ''
     return ([
       defaultLabel,
-      <Select className={hasValueFlag} value={value} onChange={handleSelectChange} clearable={clearable}
+      <Select className={hasValue} value={value.concat([])} onChange={handleSelectChange} clearable={clearable}
         filterable={options && (options.length > 9)} multiple>
         {options && options.length
           ? options.map(function (el) {
